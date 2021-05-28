@@ -1,4 +1,9 @@
 spring:
+  data:
+    mongodb:
+      port: 0
+      host: localhost
+
   jpa:
     show-sql: true
 
