@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/recipes")
 public class RecipeController {
 
+    private static final String RECIPES_FORM = "recipes/form";
     private static final String RECIPE_STR = "recipe";
     private final RecipeService recipeService;
 
@@ -43,7 +44,7 @@ public class RecipeController {
         var recipe = new RecipeCommand();
         model.addAttribute(RECIPE_STR, recipe);
 
-        return "recipes/form";
+        return RECIPES_FORM;
     }
 
     @GetMapping("/{id}/edit")
@@ -51,7 +52,7 @@ public class RecipeController {
         var recipe = recipeService.findCommandById(id);
         model.addAttribute(RECIPE_STR, recipe);
 
-        return "recipes/form";
+        return RECIPES_FORM;
     }
 
     @PostMapping
@@ -60,7 +61,7 @@ public class RecipeController {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
 
-            return "recipes/form";
+            return RECIPES_FORM;
         }
 
         RecipeCommand savedCommand = recipeService.saveCommand(command);

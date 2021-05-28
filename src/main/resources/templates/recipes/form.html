@@ -152,17 +152,21 @@
                     </div>
                   </div>
                 </div>
-                <!-- TODO: <div class="row mt-3">
-                  <div class="col-md-3">
-                    <label th:text="#{recipe.categories}" for="categories">Categories</label>
-                    <select multiple class="form-control">
-                      <option th:each="category : ${categories}"
-                              th:text="${category.description}">
-                        TEXT
-                      </option>
-                    </select>
-                  </div>
-                </div> -->
+                <div th:each="ingredient,iter : ${recipe.ingredients}">
+                  <input type="hidden"
+                         th:field="*{ingredients[__${iter.index}__].id}" />
+                  <input type="hidden"
+                         th:field="*{ingredients[__${iter.index}__].description}" />
+                  <input type="hidden"
+                         th:field="*{ingredients[__${iter.index}__].amount}" />
+                  <input type="hidden"
+                         th:if="*{ingredients[__${iter.index}__].uom} != null"
+                         th:field="*{ingredients[__${iter.index}__].uom.id}" />
+                </div>
+                <div th:each="category,iter : ${recipe.categories}">
+                  <input type="hidden"
+                         th:field="*{categories[__${iter.index}__].id}" />
+                </div>
                 <div class="row mt-3">
                   <div class="col-md-12">
                     <label th:text="#{recipe.notes}"

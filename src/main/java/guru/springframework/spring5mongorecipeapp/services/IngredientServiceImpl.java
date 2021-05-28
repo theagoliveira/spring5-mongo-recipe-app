@@ -102,7 +102,15 @@ public class IngredientServiceImpl implements IngredientService {
                                              .findFirst();
             }
 
-            return ingredientToIngredientCommand.convert(savedIngredient.orElse(null));
+            var ingredientCommandSaved = ingredientToIngredientCommand.convert(
+                savedIngredient.orElse(null)
+            );
+
+            if (ingredientCommandSaved != null) {
+                ingredientCommandSaved.setRecipeId(recipe.getId());
+            }
+
+            return ingredientCommandSaved;
         }
     }
 

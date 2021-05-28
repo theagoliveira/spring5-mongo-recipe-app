@@ -1,6 +1,7 @@
 package guru.springframework.spring5mongorecipeapp.domain;
 
-import org.springframework.data.annotation.Id;
+import java.util.UUID;
+
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -13,8 +14,7 @@ import lombok.NoArgsConstructor;
 @Document
 public class UnitOfMeasure {
 
-    @Id
-    private String id;
+    private String id = UUID.randomUUID().toString();
     private String description;
 
 }
