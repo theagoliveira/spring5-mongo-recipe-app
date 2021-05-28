@@ -75,8 +75,6 @@ class IngredientServiceImplTest {
         recipe.setId(RECIPE_ID);
         recipe.getIngredients().add(ingredient);
 
-        ingredient.setRecipe(recipe);
-
         var returnCommand = new IngredientCommand();
         returnCommand.setId(INGREDIENT_ID);
         returnCommand.setRecipeId(RECIPE_ID);
@@ -88,8 +86,8 @@ class IngredientServiceImplTest {
         );
 
         // then
+        assertNull(command.getRecipeId());
         assertNotNull(command);
-        assertEquals(RECIPE_ID, command.getRecipeId());
         assertEquals(INGREDIENT_ID, command.getId());
         verify(recipeRepository).findById(anyString());
     }
@@ -134,7 +132,6 @@ class IngredientServiceImplTest {
         ingredient.setId(INGREDIENT_ID);
         ingredient.setDescription(DESCRIPTION);
         ingredient.setAmount(AMOUNT);
-        ingredient.setRecipe(savedRecipe);
         ingredient.setUom(new UnitOfMeasure(UOM_ID, DESCRIPTION));
         savedRecipe.addIngredient(ingredient);
 
@@ -144,9 +141,9 @@ class IngredientServiceImplTest {
         IngredientCommand savedCommand = ingredientService.saveCommand(command);
 
         // then
+        assertNull(savedCommand.getRecipeId());
         assertNotNull(savedCommand.getId());
         assertEquals(INGREDIENT_ID, savedCommand.getId());
-        assertEquals(RECIPE_ID, savedCommand.getRecipeId());
         assertEquals(DESCRIPTION, savedCommand.getDescription());
         assertEquals(AMOUNT, savedCommand.getAmount());
         assertEquals(UOM_ID, savedCommand.getUom().getId());
@@ -292,7 +289,6 @@ class IngredientServiceImplTest {
         Recipe recipe = new Recipe();
         recipe.setId(RECIPE_ID);
         recipe.addIngredient(ingredient);
-        ingredient.setRecipe(recipe);
 
         Optional<Recipe> optionalRecipe = Optional.of(recipe);
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
 import guru.springframework.spring5mongorecipeapp.domain.Ingredient;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import lombok.Synchronized;
 
 @Component
@@ -28,6 +29,14 @@ public class IngredientCommandToIngredient implements Converter<IngredientComman
         final var ingredient = new Ingredient();
         ingredient.setId(source.getId());
         ingredient.setDescription(source.getDescription());
+
+        String recipeId = source.getRecipeId();
+        if (recipeId != null) {
+            var recipe = new Recipe();
+            recipe.setId(recipeId);
+            recipe.addIngredient(ingredient);
+        }
+
         ingredient.setAmount(source.getAmount());
         ingredient.setUom(unitOfMeasureCommandToUnitOfMeasure.convert(source.getUom()));
         return ingredient;

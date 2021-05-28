@@ -50,13 +50,13 @@ class IngredientToIngredientCommandTest {
         ingredient.setId(ID);
         ingredient.setDescription(DESCRIPTION);
         ingredient.setAmount(AMOUNT);
-        ingredient.setRecipe(RECIPE);
         ingredient.setUom(UOM);
 
         // when
         IngredientCommand ingredientCommand = converter.convert(ingredient);
 
         // then
+        assertNull(ingredientCommand.getRecipeId());
         assertNotNull(ingredientCommand);
         assertNotNull(ingredientCommand.getUom());
         assertEquals(ID, ingredientCommand.getId());
@@ -64,7 +64,6 @@ class IngredientToIngredientCommandTest {
         assertEquals(AMOUNT, ingredientCommand.getAmount());
         assertEquals(UOM_ID, ingredientCommand.getUom().getId());
         assertEquals(UOM_DESCRIPTION, ingredientCommand.getUom().getDescription());
-        assertEquals(RECIPE_ID, ingredientCommand.getRecipeId());
     }
 
     @Test

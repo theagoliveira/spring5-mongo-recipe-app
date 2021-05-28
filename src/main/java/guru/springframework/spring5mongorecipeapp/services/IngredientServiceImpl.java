@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 public class IngredientServiceImpl implements IngredientService {
 
+    private static final String RECIPE_WITH_ID = "Recipe with ID ";
     private static final String NOT_FOUND = " not found.";
 
     RecipeRepository recipeRepository;
@@ -38,7 +39,7 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (!optionalRecipe.isPresent()) {
-            log.error("Recipe with ID " + recipeId + NOT_FOUND);
+            log.error(RECIPE_WITH_ID + recipeId + NOT_FOUND);
             return null;
         }
 
@@ -60,7 +61,7 @@ public class IngredientServiceImpl implements IngredientService {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (!optionalRecipe.isPresent()) {
-            log.error("Recipe with ID " + recipeId + NOT_FOUND);
+            log.error(RECIPE_WITH_ID + recipeId + NOT_FOUND);
             return null;
         } else {
             var recipe = optionalRecipe.get();
@@ -69,7 +70,6 @@ public class IngredientServiceImpl implements IngredientService {
             if (!optIngredient.isPresent()) {
                 var ingredient = ingredientCommandToIngredient.convert(command);
                 if (ingredient != null) {
-                    ingredient.setRecipe(recipe);
                     recipe.addIngredient(ingredient);
                 }
             } else {
@@ -116,14 +116,13 @@ public class IngredientServiceImpl implements IngredientService {
 
             if (optionalIngredient.isPresent()) {
                 var ingredient = optionalIngredient.get();
-                ingredient.setRecipe(null);
                 recipe.getIngredients().remove(ingredient);
                 recipeRepository.save(recipe);
             } else {
                 log.debug("Ingredient with ID " + id + NOT_FOUND);
             }
         } else {
-            log.debug("Recipe with ID " + id + NOT_FOUND);
+            log.debug(RECIPE_WITH_ID + id + NOT_FOUND);
         }
     }
 
