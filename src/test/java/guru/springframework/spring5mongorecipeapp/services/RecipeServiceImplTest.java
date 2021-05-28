@@ -1,10 +1,10 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -18,16 +18,16 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
-import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeCommandToRecipe;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeToRecipeCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 
 class RecipeServiceImplTest {
 
-    private static final Long ID = 1L;
+    private static final String ID = "1";
 
     RecipeServiceImpl recipeService;
 
@@ -59,7 +59,7 @@ class RecipeServiceImplTest {
 
         assertNotNull(recipe);
         assertEquals(ID, recipe.getId());
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
         verify(recipeRepository, never()).findAll();
     }
 
@@ -72,7 +72,7 @@ class RecipeServiceImplTest {
         });
 
         assertEquals("Recipe with ID " + ID + " not found.", exception.getMessage());
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
         verify(recipeRepository, never()).findAll();
     }
 
@@ -90,7 +90,7 @@ class RecipeServiceImplTest {
 
         assertNotNull(command);
         assertEquals(returnCommand.getId(), command.getId());
-        verify(recipeRepository).findById(anyLong());
+        verify(recipeRepository).findById(anyString());
         verify(recipeRepository, never()).findAll();
     }
 
@@ -106,7 +106,7 @@ class RecipeServiceImplTest {
 
         assertEquals(1, recipes.size());
         verify(recipeRepository).findAll();
-        verify(recipeRepository, never()).findById(anyLong());
+        verify(recipeRepository, never()).findById(anyString());
     }
 
     @Test
@@ -117,7 +117,7 @@ class RecipeServiceImplTest {
         // when
 
         // then
-        verify(recipeRepository).deleteById(anyLong());
+        verify(recipeRepository).deleteById(anyString());
     }
 
 }

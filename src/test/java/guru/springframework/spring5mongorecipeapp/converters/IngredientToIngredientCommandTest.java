@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.converters;
+package guru.springframework.spring5mongorecipeapp.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,21 +9,22 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import guru.springframework.spring5recipeapp.commands.IngredientCommand;
-import guru.springframework.spring5recipeapp.domain.Ingredient;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
+import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Ingredient;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
 
 class IngredientToIngredientCommandTest {
 
-    public static final Long ID = 1L;
+    public static final String ID = "1";
     public static final String DESCRIPTION = "description";
     public static final BigDecimal AMOUNT = BigDecimal.valueOf(1.0);
-    public static final Long UOM_ID = 5L;
+    public static final String UOM_ID = "5";
     public static final String UOM_DESCRIPTION = "uomDescription";
     public static final UnitOfMeasure UOM = new UnitOfMeasure(UOM_ID, UOM_DESCRIPTION);
-    public static final Long RECIPE_ID = 99L;
-    public static final Recipe RECIPE = new Recipe(RECIPE_ID);
+    public static final String RECIPE_ID = "99";
+    public static final String RECIPE_NAME = "name";
+    public static final Recipe RECIPE = new Recipe(RECIPE_ID, RECIPE_NAME);
 
     IngredientToIngredientCommand converter;
 

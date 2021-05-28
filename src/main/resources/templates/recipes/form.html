@@ -87,7 +87,7 @@
                     <label th:text="#{recipe.difficulty}"
                            for="difficulty">Difficulty</label>
                     <select class="form-control" th:field="*{difficulty}">
-                      <option th:each="difficulty : ${T(guru.springframework.spring5recipeapp.domain.Difficulty).values()}"
+                      <option th:each="difficulty : ${T(guru.springframework.spring5mongorecipeapp.domain.Difficulty).values()}"
                               th:value="${difficulty.name()}"
                               th:text="${difficulty}">
                         TEXT

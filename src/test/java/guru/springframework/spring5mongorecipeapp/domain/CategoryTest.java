@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.domain;
+package guru.springframework.spring5mongorecipeapp.domain;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -16,7 +16,7 @@ class CategoryTest {
 
     @Test
     void getId() {
-        Long idValue = 4L;
+        String idValue = "4";
 
         category.setId(idValue);
 

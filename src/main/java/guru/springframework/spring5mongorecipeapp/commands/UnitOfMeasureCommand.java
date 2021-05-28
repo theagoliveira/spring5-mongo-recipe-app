@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.commands;
+package guru.springframework.spring5mongorecipeapp.commands;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class UnitOfMeasureCommand {
 
-    private Long id;
+    private String id;
     private String description;
 
 }

@@ -1,17 +1,15 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
-import guru.springframework.spring5recipeapp.commands.IngredientCommand;
-import guru.springframework.spring5recipeapp.converters.IngredientCommandToIngredient;
-import guru.springframework.spring5recipeapp.converters.IngredientToIngredientCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
-import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
+import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.converters.IngredientCommandToIngredient;
+import guru.springframework.spring5mongorecipeapp.converters.IngredientToIngredientCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -36,7 +34,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public IngredientCommand findCommandByIdAndRecipeId(Long id, Long recipeId) {
+    public IngredientCommand findCommandByIdAndRecipeId(String id, String recipeId) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (!optionalRecipe.isPresent()) {
@@ -56,10 +54,9 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    @Transactional
     public IngredientCommand saveCommand(IngredientCommand command) {
-        Long id = command.getId();
-        Long recipeId = command.getRecipeId();
+        String id = command.getId();
+        String recipeId = command.getRecipeId();
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
 
         if (!optionalRecipe.isPresent()) {
@@ -110,7 +107,7 @@ public class IngredientServiceImpl implements IngredientService {
     }
 
     @Override
-    public void deleteByIdAndRecipeId(Long id, Long recipeId) {
+    public void deleteByIdAndRecipeId(String id, String recipeId) {
         var optionalRecipe = recipeRepository.findById(recipeId);
 
         if (optionalRecipe.isPresent()) {

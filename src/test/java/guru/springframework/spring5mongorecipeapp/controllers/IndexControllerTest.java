@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.controllers;
+package guru.springframework.spring5mongorecipeapp.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.ui.Model;
 
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.services.RecipeServiceImpl;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
 
 class IndexControllerTest {
 

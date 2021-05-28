@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.domain;
+package guru.springframework.spring5mongorecipeapp.domain;
 
 public enum Difficulty {
 

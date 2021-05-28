@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.converters;
+package guru.springframework.spring5mongorecipeapp.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,16 +9,16 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import guru.springframework.spring5recipeapp.commands.CategoryCommand;
-import guru.springframework.spring5recipeapp.commands.IngredientCommand;
-import guru.springframework.spring5recipeapp.commands.NotesCommand;
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Difficulty;
-import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.commands.CategoryCommand;
+import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.commands.NotesCommand;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Difficulty;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 
 class RecipeCommandToRecipeTest {
 
-    public static final Long ID = 1L;
+    public static final String ID = "1";
     public static final String NAME = "name";
     public static final String DESCRIPTION = "description";
     public static final Integer PREP_TIME = 1;
@@ -28,29 +28,29 @@ class RecipeCommandToRecipeTest {
     public static final String URL = "url";
     public static final String DIRECTIONS = "directions";
     public static final Difficulty DIFFICULTY = Difficulty.HARD;
-    public static final Long NOTES_ID = 5L;
+    public static final String NOTES_ID = "5";
     public static final String RECIPE_NOTES = "recipeNotes";
     public static final NotesCommand NOTES = new NotesCommand(NOTES_ID, RECIPE_NOTES);
     private static final String IMAGE_TEXT = "imageText";
     private static final byte[] IMAGE_TEXT_BYTES = IMAGE_TEXT.getBytes();
-    public static final Long INGREDIENT1_ID = 8L;
+    public static final String INGREDIENT1_ID = "8";
     public static final String INGREDIENT1_DESCRIPTION = "ingredient1Description";
     public static final BigDecimal INGREDIENT1_AMOUNT = BigDecimal.valueOf(1.5);
     public static final IngredientCommand INGREDIENT1 = new IngredientCommand(
         INGREDIENT1_ID, INGREDIENT1_DESCRIPTION, INGREDIENT1_AMOUNT
     );
-    public static final Long INGREDIENT2_ID = 9L;
+    public static final String INGREDIENT2_ID = "9";
     public static final String INGREDIENT2_DESCRIPTION = "ingredient2Description";
     public static final BigDecimal INGREDIENT2_AMOUNT = BigDecimal.valueOf(3.5);
     public static final IngredientCommand INGREDIENT2 = new IngredientCommand(
         INGREDIENT2_ID, INGREDIENT2_DESCRIPTION, INGREDIENT2_AMOUNT
     );
-    public static final Long CATEGORY1_ID = 10L;
+    public static final String CATEGORY1_ID = "10";
     public static final String CATEGORY1_DESCRIPTION = "category1Description";
     public static final CategoryCommand CATEGORY1 = new CategoryCommand(
         CATEGORY1_ID, CATEGORY1_DESCRIPTION
     );
-    public static final Long CATEGORY2_ID = 11L;
+    public static final String CATEGORY2_ID = "11";
     public static final String CATEGORY2_DESCRIPTION = "category2Description";
     public static final CategoryCommand CATEGORY2 = new CategoryCommand(
         CATEGORY2_ID, CATEGORY2_DESCRIPTION

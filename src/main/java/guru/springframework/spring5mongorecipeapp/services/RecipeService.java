@@ -1,20 +1,20 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import java.util.Set;
 
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 
 public interface RecipeService {
 
-    Recipe findById(Long id);
+    Recipe findById(String id);
 
-    RecipeCommand findCommandById(Long id);
+    RecipeCommand findCommandById(String id);
 
     Set<Recipe> findAll();
 
     RecipeCommand saveCommand(RecipeCommand command);
 
-    void deleteById(Long id);
+    void deleteById(String id);
 
 }

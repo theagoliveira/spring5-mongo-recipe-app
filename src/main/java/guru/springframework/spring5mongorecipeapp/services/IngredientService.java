@@ -1,13 +1,13 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
-import guru.springframework.spring5recipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
 
 public interface IngredientService {
 
-    IngredientCommand findCommandByIdAndRecipeId(Long id, Long recipeId);
+    IngredientCommand findCommandByIdAndRecipeId(String id, String recipeId);
 
     IngredientCommand saveCommand(IngredientCommand command);
 
-    void deleteByIdAndRecipeId(Long id, Long recipeId);
+    void deleteByIdAndRecipeId(String id, String recipeId);
 
 }

@@ -1,7 +1,10 @@
-# spring:
-#   profiles:
-#     active:
-#     - dev
+spring:
+  jpa:
+    show-sql: true
+
+  sql:
+    init:
+      platform: h2
 
 logging:
   level:

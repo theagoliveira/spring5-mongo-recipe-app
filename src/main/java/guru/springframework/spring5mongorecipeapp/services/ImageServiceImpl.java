@@ -1,11 +1,11 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import java.io.IOException;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -19,7 +19,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void saveFile(Long recipeId, MultipartFile file) {
+    public void saveFile(String recipeId, MultipartFile file) {
         var optionalRecipe = recipeRepository.findById(recipeId);
 
         if (optionalRecipe.isPresent()) {

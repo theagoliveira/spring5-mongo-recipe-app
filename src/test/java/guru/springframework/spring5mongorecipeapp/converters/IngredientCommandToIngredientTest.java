@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.converters;
+package guru.springframework.spring5mongorecipeapp.converters;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -9,16 +9,16 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import guru.springframework.spring5recipeapp.commands.IngredientCommand;
-import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
-import guru.springframework.spring5recipeapp.domain.Ingredient;
+import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Ingredient;
 
 class IngredientCommandToIngredientTest {
 
-    public static final Long ID = 1L;
+    public static final String ID = "1";
     public static final String DESCRIPTION = "description";
     public static final BigDecimal AMOUNT = BigDecimal.valueOf(1.0);
-    public static final Long UOM_ID = 5L;
+    public static final String UOM_ID = "5";
     public static final String UOM_DESCRIPTION = "uomDescription";
     public static final UnitOfMeasureCommand UOM = new UnitOfMeasureCommand(
         UOM_ID, UOM_DESCRIPTION

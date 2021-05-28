@@ -1,10 +1,10 @@
-package guru.springframework.spring5recipeapp.controllers;
+package guru.springframework.spring5mongorecipeapp.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import guru.springframework.spring5recipeapp.services.RecipeServiceImpl;
+import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j

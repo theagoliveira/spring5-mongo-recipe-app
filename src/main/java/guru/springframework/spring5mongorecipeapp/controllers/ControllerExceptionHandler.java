@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.controllers;
+package guru.springframework.spring5mongorecipeapp.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;

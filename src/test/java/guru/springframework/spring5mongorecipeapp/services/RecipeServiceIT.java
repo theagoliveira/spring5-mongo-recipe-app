@@ -1,19 +1,19 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import javax.transaction.Transactional;
-
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
-import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeCommandToRecipe;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeToRecipeCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 
+@Disabled
 @SpringBootTest
 class RecipeServiceIT {
 
@@ -31,7 +31,7 @@ class RecipeServiceIT {
     @Autowired
     RecipeToRecipeCommand recipeToRecipeCommand;
 
-    @Transactional
+    @Disabled
     @Test
     void testSaveOfDescription() {
         // given

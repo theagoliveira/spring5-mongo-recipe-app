@@ -1,19 +1,17 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
-import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Service;
 
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.converters.RecipeCommandToRecipe;
-import guru.springframework.spring5recipeapp.converters.RecipeToRecipeCommand;
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeCommandToRecipe;
+import guru.springframework.spring5mongorecipeapp.converters.RecipeToRecipeCommand;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,7 +31,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public Recipe findById(Long id) {
+    public Recipe findById(String id) {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(id);
 
         if (optionalRecipe.isPresent()) {
@@ -44,8 +42,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
-    public RecipeCommand findCommandById(Long id) {
+    public RecipeCommand findCommandById(String id) {
         return recipeToRecipeCommand.convert(this.findById(id));
     }
 
@@ -61,7 +58,6 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    @Transactional
     public RecipeCommand saveCommand(RecipeCommand command) {
         var detachedRecipe = recipeCommandToRecipe.convert(command);
 
@@ -76,7 +72,7 @@ public class RecipeServiceImpl implements RecipeService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteById(String id) {
         recipeRepository.deleteById(id);
     }
 

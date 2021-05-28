@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.exceptions;
+package guru.springframework.spring5mongorecipeapp.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

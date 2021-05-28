@@ -1,11 +1,11 @@
-package guru.springframework.spring5recipeapp.converters;
+package guru.springframework.spring5mongorecipeapp.converters;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
-import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
+import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
+import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
 import lombok.Synchronized;
 
 @Component

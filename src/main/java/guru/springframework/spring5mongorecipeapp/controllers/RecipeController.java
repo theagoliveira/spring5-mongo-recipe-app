@@ -1,6 +1,4 @@
-package guru.springframework.spring5recipeapp.controllers;
-
-import javax.validation.Valid;
+package guru.springframework.spring5mongorecipeapp.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
-import guru.springframework.spring5recipeapp.commands.RecipeCommand;
-import guru.springframework.spring5recipeapp.exceptions.NotFoundException;
-import guru.springframework.spring5recipeapp.services.RecipeService;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
+import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -33,7 +31,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}")
-    public String showRecipe(@PathVariable Long id, Model model) {
+    public String showRecipe(@PathVariable String id, Model model) {
         var recipe = recipeService.findById(id);
         model.addAttribute(RECIPE_STR, recipe);
 
@@ -49,7 +47,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editRecipe(@PathVariable Long id, Model model) {
+    public String editRecipe(@PathVariable String id, Model model) {
         var recipe = recipeService.findCommandById(id);
         model.addAttribute(RECIPE_STR, recipe);
 
@@ -57,7 +55,7 @@ public class RecipeController {
     }
 
     @PostMapping
-    public String createOrUpdateRecipe(@Valid @ModelAttribute("recipe") RecipeCommand command,
+    public String createOrUpdateRecipe(@ModelAttribute("recipe") RecipeCommand command,
                                        BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
@@ -71,7 +69,7 @@ public class RecipeController {
     }
 
     @GetMapping("/{id}/delete")
-    public String destroyRecipe(@PathVariable Long id) {
+    public String destroyRecipe(@PathVariable String id) {
         recipeService.deleteById(id);
 
         return "redirect:/index";

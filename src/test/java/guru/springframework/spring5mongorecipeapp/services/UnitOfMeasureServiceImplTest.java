@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -12,15 +12,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import guru.springframework.spring5recipeapp.commands.UnitOfMeasureCommand;
-import guru.springframework.spring5recipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
-import guru.springframework.spring5recipeapp.domain.UnitOfMeasure;
-import guru.springframework.spring5recipeapp.repositories.UnitOfMeasureRepository;
+import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
+import guru.springframework.spring5mongorecipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
+import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
+import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
 
 public class UnitOfMeasureServiceImplTest {
 
-    private static final Long UOM_ID1 = 1L;
-    private static final Long UOM_ID2 = 2L;
+    private static final String UOM_ID1 = "1";
+    private static final String UOM_ID2 = "2";
 
     @Mock
     UnitOfMeasureRepository unitOfMeasureRepository;

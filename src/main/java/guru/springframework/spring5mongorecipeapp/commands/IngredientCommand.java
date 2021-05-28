@@ -1,4 +1,4 @@
-package guru.springframework.spring5recipeapp.commands;
+package guru.springframework.spring5mongorecipeapp.commands;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
@@ -12,13 +12,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class IngredientCommand {
 
-    private Long id;
-    private Long recipeId;
+    private String id;
+    private String recipeId;
     private String description;
     private BigDecimal amount;
     private UnitOfMeasureCommand uom;
 
-    public IngredientCommand(Long id, String description, BigDecimal amount) {
+    public IngredientCommand(String id, String description, BigDecimal amount) {
         this.id = id;
         this.description = description;
         this.amount = amount;

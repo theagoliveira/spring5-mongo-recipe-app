@@ -1,7 +1,7 @@
-package guru.springframework.spring5recipeapp.services;
+package guru.springframework.spring5mongorecipeapp.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -14,12 +14,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.mock.web.MockMultipartFile;
 
-import guru.springframework.spring5recipeapp.domain.Recipe;
-import guru.springframework.spring5recipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 
 class ImageServiceImplTest {
 
-    private static final Long ID = 1L;
+    private static final String ID = "1";
 
     @Mock
     RecipeRepository recipeRepository;
@@ -44,7 +44,7 @@ class ImageServiceImplTest {
         ArgumentCaptor<Recipe> argumentCaptor = ArgumentCaptor.forClass(Recipe.class);
 
         // when
-        when(recipeRepository.findById(anyLong())).thenReturn(optionalRecipe);
+        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
         imageService.saveFile(ID, multipartFile);
 
         // then
