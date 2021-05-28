@@ -21,8 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 public class DataLoader implements CommandLineRunner {
 
     private final RecipeRepository recipeRepository;
-    private final CategoryRepository categoryRepository;
     private final UnitOfMeasureRepository unitOfMeasureRepository;
+    private final CategoryRepository categoryRepository;
 
     public DataLoader(RecipeRepository recipeRepository,
                       UnitOfMeasureRepository unitOfMeasureRepository,

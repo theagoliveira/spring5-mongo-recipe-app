@@ -5,26 +5,38 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
+import guru.springframework.spring5mongorecipeapp.bootstrap.DataLoader;
 import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
 
-@Disabled
-@SpringBootTest
+@DataMongoTest
 class UnitOfMeasureRepositoryIT {
+
+    @Autowired
+    RecipeRepository recipeRepository;
 
     @Autowired
     UnitOfMeasureRepository unitOfMeasureRepository;
 
-    @BeforeEach
-    void setUp() {
+    @Autowired
+    CategoryRepository categoryRepository;
 
+    @BeforeEach
+    void setUp() throws Exception {
+        recipeRepository.deleteAll();
+        unitOfMeasureRepository.deleteAll();
+        categoryRepository.deleteAll();
+
+        var dataLoader = new DataLoader(
+            recipeRepository, unitOfMeasureRepository, categoryRepository
+        );
+
+        dataLoader.run();
     }
 
-    @Disabled
     @Test
     void findByDescriptionTeaspoon() {
         Optional<UnitOfMeasure> optionalUom = unitOfMeasureRepository.findByDescription("teaspoon");
@@ -32,7 +44,6 @@ class UnitOfMeasureRepositoryIT {
         assertEquals("teaspoon", optionalUom.get().getDescription());
     }
 
-    @Disabled
     @Test
     void findByDescriptionCup() {
         Optional<UnitOfMeasure> optionalUom = unitOfMeasureRepository.findByDescription("cup");

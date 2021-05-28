@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-Spring5MongoRecipeAppApplication<spring5-mongo-recipe-app>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "mainClass": "guru.springframework.spring5mongorecipeapp.Spring5MongoRecipeAppApplication",
+      "projectName": "spring5-mongo-recipe-app",
+      "args": ""
+    }
+  ]
+}

@@ -2,36 +2,77 @@ package guru.springframework.spring5mongorecipeapp.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
+import guru.springframework.spring5mongorecipeapp.bootstrap.DataLoader;
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.converters.CategoryCommandToCategory;
+import guru.springframework.spring5mongorecipeapp.converters.CategoryToCategoryCommand;
+import guru.springframework.spring5mongorecipeapp.converters.IngredientCommandToIngredient;
+import guru.springframework.spring5mongorecipeapp.converters.IngredientToIngredientCommand;
+import guru.springframework.spring5mongorecipeapp.converters.NotesCommandToNotes;
+import guru.springframework.spring5mongorecipeapp.converters.NotesToNotesCommand;
 import guru.springframework.spring5mongorecipeapp.converters.RecipeCommandToRecipe;
 import guru.springframework.spring5mongorecipeapp.converters.RecipeToRecipeCommand;
+import guru.springframework.spring5mongorecipeapp.converters.UnitOfMeasureCommandToUnitOfMeasure;
+import guru.springframework.spring5mongorecipeapp.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.repositories.CategoryRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
 
-@Disabled
-@SpringBootTest
+@DataMongoTest
 class RecipeServiceIT {
 
     private static final String NEW_DESCRIPTION = "newDescription";
 
-    @Autowired
     RecipeService recipeService;
 
     @Autowired
     RecipeRepository recipeRepository;
 
     @Autowired
-    RecipeCommandToRecipe recipeCommandToRecipe;
+    UnitOfMeasureRepository unitOfMeasureRepository;
 
     @Autowired
-    RecipeToRecipeCommand recipeToRecipeCommand;
+    CategoryRepository categoryRepository;
 
-    @Disabled
+    UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand = new UnitOfMeasureToUnitOfMeasureCommand();
+    IngredientToIngredientCommand ingredientToIngredientCommand = new IngredientToIngredientCommand(
+        unitOfMeasureToUnitOfMeasureCommand
+    );
+    CategoryToCategoryCommand categoryToCategoryCommand = new CategoryToCategoryCommand();
+    NotesToNotesCommand notesToNotesCommand = new NotesToNotesCommand();
+    RecipeToRecipeCommand recipeToRecipeCommand = new RecipeToRecipeCommand(
+        ingredientToIngredientCommand, categoryToCategoryCommand, notesToNotesCommand
+    );
+
+    UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
+    IngredientCommandToIngredient ingredientCommandToIngredient = new IngredientCommandToIngredient(
+        unitOfMeasureCommandToUnitOfMeasure
+    );
+    CategoryCommandToCategory categoryCommandToCategory = new CategoryCommandToCategory();
+    NotesCommandToNotes notesCommandToNotes = new NotesCommandToNotes();
+    RecipeCommandToRecipe recipeCommandToRecipe = new RecipeCommandToRecipe(
+        ingredientCommandToIngredient, categoryCommandToCategory, notesCommandToNotes
+    );
+
+    @BeforeEach
+    void setUp() throws Exception {
+        recipeService = new RecipeServiceImpl(
+            recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand
+        );
+
+        var dataLoader = new DataLoader(
+            recipeRepository, unitOfMeasureRepository, categoryRepository
+        );
+
+        dataLoader.run();
+    }
+
     @Test
     void testSaveOfDescription() {
         // given

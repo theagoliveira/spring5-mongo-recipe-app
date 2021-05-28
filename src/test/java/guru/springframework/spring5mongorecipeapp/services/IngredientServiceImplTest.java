@@ -141,8 +141,8 @@ class IngredientServiceImplTest {
         IngredientCommand savedCommand = ingredientService.saveCommand(command);
 
         // then
-        assertNull(savedCommand.getRecipeId());
         assertNotNull(savedCommand.getId());
+        assertEquals(RECIPE_ID, savedCommand.getRecipeId());
         assertEquals(INGREDIENT_ID, savedCommand.getId());
         assertEquals(DESCRIPTION, savedCommand.getDescription());
         assertEquals(AMOUNT, savedCommand.getAmount());
