@@ -1,0 +1,68 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2.1
+
+jobs:
+  build-and-test:
+    # These next lines define a Docker executor: https://circleci.com/docs/2.0/executor-types/
+    # You can specify an image from Dockerhub or use one of our Convenience Images from CircleCI's Developer Hub.
+    # Be sure to update the Docker image tag below to openjdk version of your applicationla.
+    # A list of avaible CircleCI Docker Convenience Images are available here: https://circleci.com/developer/images/image/cimg/openjdk
+    docker:
+      - image: cimg/openjdk:11.0
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      # Checkout the code as the first step.
+      - checkout
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+
+      # run tests!
+      - run: ./gradlew clean test jacocoTestReport
+
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+          when: always
+
+      - store_test_results:
+          path: ~/junit
+
+      - store_artifacts:
+          path: ~/junit
+
+      - run:
+          name: Send to CodeCov
+          command: bash <(curl -s https://codecov.io/bash)
+
+workflows:
+  # Below is the definition of your workflow.
+  # Inside the workflow, you provide the jobs you want to run, e.g this workflow runs the build-and-test job above.
+  # CircleCI will run this workflow on every commit.
+  # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
+  main-workflow:
+    jobs:
+      - build-and-test
