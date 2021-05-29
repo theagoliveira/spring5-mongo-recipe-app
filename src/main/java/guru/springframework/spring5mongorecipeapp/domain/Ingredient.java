@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.UUID;
 
-import org.springframework.data.mongodb.core.mapping.DBRef;
-
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +18,6 @@ public class Ingredient {
     private String id = UUID.randomUUID().toString();
     private String description;
     private BigDecimal amount;
-
-    @DBRef
     private UnitOfMeasure uom;
 
     public Ingredient(String id, String description, BigDecimal amount) {
@@ -75,7 +71,8 @@ public class Ingredient {
             }
 
             if (amount != null && amount.compareTo(BigDecimal.valueOf(1)) != 0) {
-                if (uom.getDescription().charAt(uom.getDescription().length() - 1) == 'h') {
+                if (uom.getDescription() != null
+                        && uom.getDescription().charAt(uom.getDescription().length() - 1) == 'h') {
                     result += "e";
                 }
                 result += "s";

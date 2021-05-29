@@ -69,7 +69,8 @@ public class IngredientCommand {
             }
 
             if (amount != null && amount.compareTo(BigDecimal.valueOf(1)) != 0) {
-                if (uom.getDescription().charAt(uom.getDescription().length() - 1) == 'h') {
+                if (uom.getDescription() != null
+                        && uom.getDescription().charAt(uom.getDescription().length() - 1) == 'h') {
                     result += "e";
                 }
                 result += "s";

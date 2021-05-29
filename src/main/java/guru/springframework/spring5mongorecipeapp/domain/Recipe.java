@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Data;
@@ -30,8 +29,6 @@ public class Recipe {
     private Set<Ingredient> ingredients = new HashSet<>();
     private Byte[] image;
     private Notes notes;
-
-    @DBRef
     private Set<Category> categories = new HashSet<>();
 
     public Recipe(String id, String name) {

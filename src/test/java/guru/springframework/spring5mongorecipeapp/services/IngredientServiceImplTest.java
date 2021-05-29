@@ -10,7 +10,6 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.math.BigDecimal;
-import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +25,6 @@ import guru.springframework.spring5mongorecipeapp.converters.UnitOfMeasureToUnit
 import guru.springframework.spring5mongorecipeapp.domain.Ingredient;
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
-import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import reactor.core.publisher.Mono;
@@ -39,9 +37,10 @@ class IngredientServiceImplTest {
     private static final String UOM_ID = "4";
     private static final String DESCRIPTION = "description";
     private static final BigDecimal AMOUNT = BigDecimal.valueOf(4.0);
-
-    @Mock
-    RecipeRepository recipeRepository;
+    private static final UnitOfMeasure UOM = new UnitOfMeasure(UOM_ID, DESCRIPTION);
+    private static final UnitOfMeasureCommand UOM_COMMAND = new UnitOfMeasureCommand(
+        UOM_ID, DESCRIPTION
+    );
 
     @Mock
     RecipeReactiveRepository recipeReactiveRepository;
@@ -65,7 +64,7 @@ class IngredientServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ingredientService = new IngredientServiceImpl(
-            recipeRepository, recipeReactiveRepository, unitOfMeasureReactiveRepository,
+            recipeReactiveRepository, unitOfMeasureReactiveRepository,
             ingredientToIngredientCommand, ingredientCommandToIngredient
         );
     }
@@ -105,18 +104,19 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(Optional.empty());
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.empty());
         IngredientCommand savedCommand = ingredientService.saveCommand(command).block();
 
         // then
         assertNotNull(savedCommand);
         assertNull(savedCommand.getId());
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository, never()).save(any());
-        verify(unitOfMeasureReactiveRepository, never()).findById(anyString());
+        verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository, never()).save(any());
     }
 
     @Test
@@ -126,11 +126,11 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         Recipe recipe = new Recipe();
         recipe.setId(RECIPE_ID);
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+        Mono<Recipe> monoRecipe = Mono.just(recipe);
 
         Recipe savedRecipe = new Recipe();
         savedRecipe.setId(RECIPE_ID);
@@ -142,8 +142,9 @@ class IngredientServiceImplTest {
         savedRecipe.addIngredient(ingredient);
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
-        when(recipeRepository.save(any())).thenReturn(savedRecipe);
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(monoRecipe);
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
         IngredientCommand savedCommand = ingredientService.saveCommand(command).block();
 
         // then
@@ -154,9 +155,9 @@ class IngredientServiceImplTest {
         assertEquals(AMOUNT, savedCommand.getAmount());
         assertEquals(UOM_ID, savedCommand.getUom().getId());
         assertEquals(DESCRIPTION, savedCommand.getUom().getDescription());
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
-        verify(unitOfMeasureReactiveRepository, never()).findById(anyString());
+        verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
     @Test
@@ -167,23 +168,24 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         Recipe recipe = new Recipe();
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+        Mono<Recipe> monoRecipe = Mono.just(recipe);
 
         Recipe savedRecipe = new Recipe();
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
-        when(recipeRepository.save(any())).thenReturn(savedRecipe);
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(monoRecipe);
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
         Mono<IngredientCommand> savedCommand = ingredientService.saveCommand(command);
 
         // then
         assertNull(savedCommand);
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
-        verify(unitOfMeasureReactiveRepository, never()).findById(anyString());
+        verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
     @Test
@@ -194,30 +196,28 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         var ingredient = new Ingredient();
         ingredient.setId(COMMAND_ID);
 
         Recipe recipe = new Recipe();
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+        Mono<Recipe> monoRecipe = Mono.just(recipe);
         recipe.addIngredient(ingredient);
 
         Recipe savedRecipe = new Recipe();
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
-        when(recipeRepository.save(any())).thenReturn(savedRecipe);
-        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(
-            Mono.just(new UnitOfMeasure(UOM_ID, DESCRIPTION))
-        );
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(monoRecipe);
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
         Mono<IngredientCommand> savedCommand = ingredientService.saveCommand(command);
 
         // then
         assertNull(savedCommand);
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
         verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
     @Test
@@ -228,27 +228,31 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         var ingredient = new Ingredient();
         ingredient.setId(COMMAND_ID);
+        ingredient.setDescription(DESCRIPTION);
+        ingredient.setAmount(AMOUNT);
+        ingredient.setUom(UOM);
 
         Recipe recipe = new Recipe();
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+        Mono<Recipe> monoRecipe = Mono.just(recipe);
 
         Recipe savedRecipe = new Recipe();
         savedRecipe.addIngredient(ingredient);
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
-        when(recipeRepository.save(any())).thenReturn(savedRecipe);
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(monoRecipe);
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
         IngredientCommand savedCommand = ingredientService.saveCommand(command).block();
 
         // then
         assertEquals(COMMAND_ID, savedCommand.getId());
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
-        verify(unitOfMeasureReactiveRepository, never()).findById(anyString());
+        verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
     @Test
@@ -259,31 +263,29 @@ class IngredientServiceImplTest {
         command.setRecipeId(RECIPE_ID);
         command.setDescription(DESCRIPTION);
         command.setAmount(AMOUNT);
-        command.setUom(new UnitOfMeasureCommand(UOM_ID, DESCRIPTION));
+        command.setUom(UOM_COMMAND);
 
         var ingredient = new Ingredient();
         ingredient.setId(COMMAND_ID);
 
         Recipe recipe = new Recipe();
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
+        Mono<Recipe> monoRecipe = Mono.just(recipe);
         recipe.addIngredient(ingredient);
 
         Recipe savedRecipe = new Recipe();
         savedRecipe.addIngredient(ingredient);
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
-        when(recipeRepository.save(any())).thenReturn(savedRecipe);
-        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(
-            Mono.just(new UnitOfMeasure(UOM_ID, DESCRIPTION))
-        );
+        when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(UOM));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(monoRecipe);
+        when(recipeReactiveRepository.save(any())).thenReturn(Mono.just(savedRecipe));
         IngredientCommand savedCommand = ingredientService.saveCommand(command).block();
 
         // then
         assertEquals(COMMAND_ID, savedCommand.getId());
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
         verify(unitOfMeasureReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
     @Test
@@ -296,15 +298,14 @@ class IngredientServiceImplTest {
         recipe.setId(RECIPE_ID);
         recipe.addIngredient(ingredient);
 
-        Optional<Recipe> optionalRecipe = Optional.of(recipe);
-
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(optionalRecipe);
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
+        when(recipeReactiveRepository.save(any(Recipe.class))).thenReturn(Mono.just(recipe));
         ingredientService.deleteByIdAndRecipeId(INGREDIENT_ID, RECIPE_ID);
 
         // then
-        verify(recipeRepository).findById(anyString());
-        verify(recipeRepository).save(any(Recipe.class));
+        verify(recipeReactiveRepository).findById(anyString());
+        verify(recipeReactiveRepository).save(any(Recipe.class));
     }
 
 }
