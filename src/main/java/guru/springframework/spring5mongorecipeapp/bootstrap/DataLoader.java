@@ -14,9 +14,6 @@ import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
 import guru.springframework.spring5mongorecipeapp.repositories.CategoryRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.CategoryReactiveRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -27,22 +24,12 @@ public class DataLoader implements CommandLineRunner {
     private final UnitOfMeasureRepository unitOfMeasureRepository;
     private final CategoryRepository categoryRepository;
 
-    private final RecipeReactiveRepository recipeReactiveRepository;
-    private final CategoryReactiveRepository categoryReactiveRepository;
-    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
-
     public DataLoader(RecipeRepository recipeRepository,
                       UnitOfMeasureRepository unitOfMeasureRepository,
-                      CategoryRepository categoryRepository,
-                      RecipeReactiveRepository recipeReactiveRepository,
-                      UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository,
-                      CategoryReactiveRepository categoryReactiveRepository) {
+                      CategoryRepository categoryRepository) {
         this.recipeRepository = recipeRepository;
         this.unitOfMeasureRepository = unitOfMeasureRepository;
         this.categoryRepository = categoryRepository;
-        this.recipeReactiveRepository = recipeReactiveRepository;
-        this.categoryReactiveRepository = categoryReactiveRepository;
-        this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
     }
 
     @Override
@@ -67,17 +54,6 @@ public class DataLoader implements CommandLineRunner {
         } else {
             log.debug("Recipes already loaded.");
         }
-
-        log.info("#############################################");
-        log.info("Recipe Reactive Repository Count: " + recipeReactiveRepository.count().block());
-        log.info(
-            "Category Reactive Repository Count: " + categoryReactiveRepository.count().block()
-        );
-        log.info(
-            "Unit Of Measure Reactive Repository Count: "
-                    + unitOfMeasureReactiveRepository.count().block()
-        );
-        log.info("#############################################");
     }
 
     private void loadCategories() {

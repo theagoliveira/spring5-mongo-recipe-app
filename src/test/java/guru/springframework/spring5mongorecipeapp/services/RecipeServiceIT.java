@@ -23,9 +23,6 @@ import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.repositories.CategoryRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.CategoryReactiveRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
-import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 @DataMongoTest
 class RecipeServiceIT {
@@ -42,15 +39,6 @@ class RecipeServiceIT {
 
     @Autowired
     CategoryRepository categoryRepository;
-
-    @Autowired
-    RecipeReactiveRepository recipeReactiveRepository;
-
-    @Autowired
-    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
-
-    @Autowired
-    CategoryReactiveRepository categoryReactiveRepository;
 
     UnitOfMeasureToUnitOfMeasureCommand unitOfMeasureToUnitOfMeasureCommand = new UnitOfMeasureToUnitOfMeasureCommand();
     IngredientToIngredientCommand ingredientToIngredientCommand = new IngredientToIngredientCommand(
@@ -79,8 +67,7 @@ class RecipeServiceIT {
         );
 
         var dataLoader = new DataLoader(
-            recipeRepository, unitOfMeasureRepository, categoryRepository, recipeReactiveRepository,
-            unitOfMeasureReactiveRepository, categoryReactiveRepository
+            recipeRepository, unitOfMeasureRepository, categoryRepository
         );
 
         dataLoader.run();

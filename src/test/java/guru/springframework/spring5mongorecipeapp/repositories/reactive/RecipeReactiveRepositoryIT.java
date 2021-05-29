@@ -47,8 +47,7 @@ class RecipeReactiveRepositoryIT {
         categoryReactiveRepository.deleteAll().block();
 
         var dataLoader = new DataLoader(
-            recipeRepository, unitOfMeasureRepository, categoryRepository, recipeReactiveRepository,
-            unitOfMeasureReactiveRepository, categoryReactiveRepository
+            recipeRepository, unitOfMeasureRepository, categoryRepository
         );
 
         dataLoader.run();
