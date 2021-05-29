@@ -1,11 +1,10 @@
 package guru.springframework.spring5mongorecipeapp.services;
 
-import java.util.Set;
-
 import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
+import reactor.core.publisher.Flux;
 
 public interface UnitOfMeasureService {
 
-    Set<UnitOfMeasureCommand> findAllCommands();
+    Flux<UnitOfMeasureCommand> findAllCommands();
 
 }

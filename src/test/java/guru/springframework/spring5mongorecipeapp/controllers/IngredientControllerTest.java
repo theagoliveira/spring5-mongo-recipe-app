@@ -10,8 +10,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.HashSet;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -22,9 +20,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
+import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.spring5mongorecipeapp.services.IngredientService;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import guru.springframework.spring5mongorecipeapp.services.UnitOfMeasureService;
+import reactor.core.publisher.Flux;
 
 class IngredientControllerTest {
 
@@ -97,7 +97,9 @@ class IngredientControllerTest {
     void newIngredient() throws Exception {
         // when
         when(recipeService.findCommandById(anyString())).thenReturn(new RecipeCommand());
-        when(unitOfMeasureService.findAllCommands()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.findAllCommands()).thenReturn(
+            Flux.just(new UnitOfMeasureCommand())
+        );
         mockMvc.perform(get("/recipes/1/ingredients/new"))
                .andExpect(status().isOk())
                .andExpect(view().name("recipes/ingredients/form"))
@@ -117,7 +119,9 @@ class IngredientControllerTest {
         when(ingredientService.findCommandByIdAndRecipeId(anyString(), anyString())).thenReturn(
             ingredientCommand
         );
-        when(unitOfMeasureService.findAllCommands()).thenReturn(new HashSet<>());
+        when(unitOfMeasureService.findAllCommands()).thenReturn(
+            Flux.just(new UnitOfMeasureCommand())
+        );
         mockMvc.perform(get("/recipes/1/ingredients/1/edit"))
                .andExpect(status().isOk())
                .andExpect(view().name("recipes/ingredients/form"))
