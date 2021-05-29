@@ -43,7 +43,8 @@ public class IngredientController {
     @GetMapping("/{id}")
     public String showIngredient(@PathVariable String id, @PathVariable String recipeId,
                                  Model model) {
-        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId);
+        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).block();
+        ingredient.setRecipeId(recipeId);
         model.addAttribute(INGREDIENT_STR, ingredient);
         model.addAttribute("recipeName", recipeService.findCommandById(recipeId).getName());
 
@@ -70,7 +71,8 @@ public class IngredientController {
     @GetMapping("/{id}/edit")
     public String editIngredient(@PathVariable String id, @PathVariable String recipeId,
                                  Model model) {
-        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId);
+        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).block();
+        ingredient.setRecipeId(recipeId);
         model.addAttribute(INGREDIENT_STR, ingredient);
         model.addAttribute("uoms", unitOfMeasureService.findAllCommands().collectList().block());
 
@@ -80,7 +82,8 @@ public class IngredientController {
     @PostMapping
     public String createOrUpdateIngredient(@ModelAttribute IngredientCommand command,
                                            @PathVariable String recipeId) {
-        IngredientCommand savedCommand = ingredientService.saveCommand(command);
+        command.setRecipeId(recipeId);
+        IngredientCommand savedCommand = ingredientService.saveCommand(command).block();
 
         return "redirect:/recipes/" + recipeId + "/ingredients/" + savedCommand.getId();
     }

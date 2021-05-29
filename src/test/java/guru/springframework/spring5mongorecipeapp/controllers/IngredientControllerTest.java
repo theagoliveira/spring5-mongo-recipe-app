@@ -25,6 +25,7 @@ import guru.springframework.spring5mongorecipeapp.services.IngredientService;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import guru.springframework.spring5mongorecipeapp.services.UnitOfMeasureService;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 class IngredientControllerTest {
 
@@ -79,7 +80,7 @@ class IngredientControllerTest {
 
         // when
         when(ingredientService.findCommandByIdAndRecipeId(anyString(), anyString())).thenReturn(
-            ingredientCommand
+            Mono.just(ingredientCommand)
         );
         when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
         mockMvc.perform(get("/recipes/1/ingredients/1"))
@@ -117,7 +118,7 @@ class IngredientControllerTest {
 
         // when
         when(ingredientService.findCommandByIdAndRecipeId(anyString(), anyString())).thenReturn(
-            ingredientCommand
+            Mono.just(ingredientCommand)
         );
         when(unitOfMeasureService.findAllCommands()).thenReturn(
             Flux.just(new UnitOfMeasureCommand())
@@ -140,7 +141,7 @@ class IngredientControllerTest {
         command.setId(ID);
 
         // when
-        when(ingredientService.saveCommand(any())).thenReturn(command);
+        when(ingredientService.saveCommand(any())).thenReturn(Mono.just(command));
 
         // then
         mockMvc.perform(
