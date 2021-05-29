@@ -11,6 +11,9 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
 import guru.springframework.spring5mongorecipeapp.bootstrap.DataLoader;
 import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.CategoryReactiveRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 @DataMongoTest
 class UnitOfMeasureRepositoryIT {
@@ -24,6 +27,15 @@ class UnitOfMeasureRepositoryIT {
     @Autowired
     CategoryRepository categoryRepository;
 
+    @Autowired
+    RecipeReactiveRepository recipeReactiveRepository;
+
+    @Autowired
+    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+
+    @Autowired
+    CategoryReactiveRepository categoryReactiveRepository;
+
     @BeforeEach
     void setUp() throws Exception {
         recipeRepository.deleteAll();
@@ -31,7 +43,8 @@ class UnitOfMeasureRepositoryIT {
         categoryRepository.deleteAll();
 
         var dataLoader = new DataLoader(
-            recipeRepository, unitOfMeasureRepository, categoryRepository
+            recipeRepository, unitOfMeasureRepository, categoryRepository, recipeReactiveRepository,
+            unitOfMeasureReactiveRepository, categoryReactiveRepository
         );
 
         dataLoader.run();
