@@ -9,6 +9,7 @@ import guru.springframework.spring5mongorecipeapp.converters.IngredientCommandTo
 import guru.springframework.spring5mongorecipeapp.converters.IngredientToIngredientCommand;
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -20,16 +21,19 @@ public class IngredientServiceImpl implements IngredientService {
     private static final String RECIPE_WITH_ID = "Recipe with ID ";
     private static final String NOT_FOUND = " not found.";
 
-    RecipeRepository recipeRepository;
-    UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
-    IngredientToIngredientCommand ingredientToIngredientCommand;
-    IngredientCommandToIngredient ingredientCommandToIngredient;
+    private final RecipeRepository recipeRepository;
+    private final RecipeReactiveRepository recipeReactiveRepository;
+    private final UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
+    private final IngredientToIngredientCommand ingredientToIngredientCommand;
+    private final IngredientCommandToIngredient ingredientCommandToIngredient;
 
     public IngredientServiceImpl(RecipeRepository recipeRepository,
+                                 RecipeReactiveRepository recipeReactiveRepository,
                                  UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository,
                                  IngredientToIngredientCommand ingredientToIngredientCommand,
                                  IngredientCommandToIngredient ingredientCommandToIngredient) {
         this.recipeRepository = recipeRepository;
+        this.recipeReactiveRepository = recipeReactiveRepository;
         this.unitOfMeasureReactiveRepository = unitOfMeasureReactiveRepository;
         this.ingredientToIngredientCommand = ingredientToIngredientCommand;
         this.ingredientCommandToIngredient = ingredientCommandToIngredient;
@@ -37,22 +41,15 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Mono<IngredientCommand> findCommandByIdAndRecipeId(String id, String recipeId) {
-        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipeId);
-
-        if (!optionalRecipe.isPresent()) {
-            log.error(RECIPE_WITH_ID + recipeId + NOT_FOUND);
-            return null;
-        }
-
-        var recipe = optionalRecipe.get();
-        var optIngredient = recipe.getIngredientById(id);
-
-        if (!optIngredient.isPresent()) {
-            log.error("IngredientCommand with ID " + id + NOT_FOUND);
-            return null;
-        }
-
-        return Mono.just(ingredientToIngredientCommand.convert(optIngredient.get()));
+        return recipeReactiveRepository.findById(recipeId)
+                                       .flatMapIterable(Recipe::getIngredients)
+                                       .filter(i -> i.getId().equalsIgnoreCase(id))
+                                       .single()
+                                       .map(i -> {
+                                           var command = ingredientToIngredientCommand.convert(i);
+                                           command.setRecipeId(recipeId);
+                                           return command;
+                                       });
     }
 
     @Override

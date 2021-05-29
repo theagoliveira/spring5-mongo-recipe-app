@@ -55,7 +55,7 @@ public class Recipe {
     public Optional<Ingredient> getIngredientById(String ingredientId) {
         return this.getIngredients()
                    .stream()
-                   .filter(i -> i.getId().equals(ingredientId))
+                   .filter(i -> i.getId().equalsIgnoreCase(ingredientId))
                    .findFirst();
     }
 

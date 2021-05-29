@@ -27,6 +27,7 @@ import guru.springframework.spring5mongorecipeapp.domain.Ingredient;
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.domain.UnitOfMeasure;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.reactive.UnitOfMeasureReactiveRepository;
 import reactor.core.publisher.Mono;
 
@@ -41,6 +42,9 @@ class IngredientServiceImplTest {
 
     @Mock
     RecipeRepository recipeRepository;
+
+    @Mock
+    RecipeReactiveRepository recipeReactiveRepository;
 
     @Mock
     UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
@@ -61,8 +65,8 @@ class IngredientServiceImplTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         ingredientService = new IngredientServiceImpl(
-            recipeRepository, unitOfMeasureReactiveRepository, ingredientToIngredientCommand,
-            ingredientCommandToIngredient
+            recipeRepository, recipeReactiveRepository, unitOfMeasureReactiveRepository,
+            ingredientToIngredientCommand, ingredientCommandToIngredient
         );
     }
 
@@ -81,16 +85,16 @@ class IngredientServiceImplTest {
         returnCommand.setRecipeId(RECIPE_ID);
 
         // when
-        when(recipeRepository.findById(anyString())).thenReturn(Optional.of(recipe));
+        when(recipeReactiveRepository.findById(anyString())).thenReturn(Mono.just(recipe));
         IngredientCommand command = ingredientService.findCommandByIdAndRecipeId(
             INGREDIENT_ID, RECIPE_ID
         ).block();
 
         // then
-        assertNull(command.getRecipeId());
         assertNotNull(command);
+        assertEquals(RECIPE_ID, command.getRecipeId());
         assertEquals(INGREDIENT_ID, command.getId());
-        verify(recipeRepository).findById(anyString());
+        verify(recipeReactiveRepository).findById(anyString());
     }
 
     @Test
