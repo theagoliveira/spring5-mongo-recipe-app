@@ -90,7 +90,7 @@ public class IngredientController {
 
     @GetMapping("/{id}/delete")
     public String destroyIngredient(@PathVariable String id, @PathVariable String recipeId) {
-        ingredientService.deleteByIdAndRecipeId(id, recipeId);
+        ingredientService.deleteByIdAndRecipeId(id, recipeId).block();
 
         return "redirect:/recipes/" + recipeId + "/ingredients";
     }
