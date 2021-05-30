@@ -1,4 +1,4 @@
-package guru.springframework.spring5mongorecipeapp.controllers;
+/* package guru.springframework.spring5mongorecipeapp.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
@@ -80,3 +80,4 @@ class IndexControllerTest {
     }
 
 }
+ */
