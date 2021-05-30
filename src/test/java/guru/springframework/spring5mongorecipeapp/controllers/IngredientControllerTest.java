@@ -28,6 +28,7 @@ import guru.springframework.spring5mongorecipeapp.services.UnitOfMeasureService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Disabled
 class IngredientControllerTest {
 
     private static final String RECIPE_NAME = "name";

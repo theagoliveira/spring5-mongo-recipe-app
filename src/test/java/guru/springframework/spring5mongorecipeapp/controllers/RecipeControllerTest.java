@@ -28,6 +28,7 @@ import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
 import reactor.core.publisher.Mono;
 
+@Disabled
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
 

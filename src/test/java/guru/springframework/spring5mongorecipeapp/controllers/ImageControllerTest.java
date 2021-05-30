@@ -28,6 +28,7 @@ import guru.springframework.spring5mongorecipeapp.services.ImageService;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import reactor.core.publisher.Mono;
 
+@Disabled
 class ImageControllerTest {
 
     private static final String COMMAND_ID = "1";

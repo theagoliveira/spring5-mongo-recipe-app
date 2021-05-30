@@ -24,6 +24,7 @@ import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
 import reactor.core.publisher.Flux;
 
+@Disabled
 class IndexControllerTest {
 
     IndexController indexController;
@@ -43,6 +44,7 @@ class IndexControllerTest {
         indexController = new IndexController(recipeService);
     }
 
+    @Disabled
     @Test
     void getIndexPage() {
         // given
