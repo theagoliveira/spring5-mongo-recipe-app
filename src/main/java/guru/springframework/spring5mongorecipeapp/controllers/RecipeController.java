@@ -1,19 +1,16 @@
 package guru.springframework.spring5mongorecipeapp.controllers;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
-import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,8 +23,15 @@ public class RecipeController {
     private static final String RECIPE_STR = "recipe";
     private final RecipeService recipeService;
 
+    private WebDataBinder webDataBinder;
+
     public RecipeController(RecipeService recipeService) {
         this.recipeService = recipeService;
+    }
+
+    @InitBinder
+    public void initBinder(WebDataBinder webDataBinder) {
+        this.webDataBinder = webDataBinder;
     }
 
     @GetMapping("/{id}")
@@ -49,24 +53,29 @@ public class RecipeController {
     @GetMapping("/{id}/edit")
     public String editRecipe(@PathVariable String id, Model model) {
         var recipe = recipeService.findCommandById(id);
-        model.addAttribute(RECIPE_STR, recipe.block());
+        model.addAttribute(RECIPE_STR, recipe);
 
         return RECIPES_FORM;
     }
 
     @PostMapping
-    public String createOrUpdateRecipe(@ModelAttribute("recipe") RecipeCommand command,
-                                       BindingResult bindingResult) {
+    public String createOrUpdateRecipe(@ModelAttribute("recipe") RecipeCommand command) {
         log.error("Inside createOrUpdateRecipe.");
+
+        webDataBinder.validate();
+        var bindingResult = webDataBinder.getBindingResult();
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
 
             return RECIPES_FORM;
         }
 
-        RecipeCommand savedCommand = recipeService.saveCommand(command).block();
+        if (command.getId() != null && command.getId().equals("")) {
+            command.setId(null);
+        }
+        var savedCommand = recipeService.saveCommand(command);
 
-        return "redirect:/recipes/" + savedCommand.getId();
+        return "redirect:/recipes/" + savedCommand.map(RecipeCommand::getId).share().block();
     }
 
     @GetMapping("/{id}/delete")
