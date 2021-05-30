@@ -62,7 +62,7 @@ public class ImageController {
     public String upload(@PathVariable String recipeId,
                          @RequestParam("imagefile") MultipartFile file) {
         log.info("Received a file.");
-        imageService.saveFile(recipeId, file);
+        imageService.saveFile(recipeId, file).block();
 
         return "redirect:/recipes/" + recipeId;
     }

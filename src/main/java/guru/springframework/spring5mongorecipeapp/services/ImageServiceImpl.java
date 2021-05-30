@@ -5,26 +5,25 @@ import java.io.IOException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
+import guru.springframework.spring5mongorecipeapp.domain.Recipe;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
 public class ImageServiceImpl implements ImageService {
 
-    RecipeRepository recipeRepository;
+    RecipeReactiveRepository recipeReactiveRepository;
 
-    public ImageServiceImpl(RecipeRepository recipeRepository) {
-        this.recipeRepository = recipeRepository;
+    public ImageServiceImpl(RecipeReactiveRepository recipeReactiveRepository) {
+        this.recipeReactiveRepository = recipeReactiveRepository;
     }
 
     @Override
-    public void saveFile(String recipeId, MultipartFile file) {
-        var optionalRecipe = recipeRepository.findById(recipeId);
-
-        if (optionalRecipe.isPresent()) {
+    public Mono<Void> saveFile(String recipeId, MultipartFile file) {
+        Mono<Recipe> recipeMono = recipeReactiveRepository.findById(recipeId).map(recipe -> {
             try {
-                var recipe = optionalRecipe.get();
                 var fileBytes = file.getBytes();
                 var boxedFileBytes = new Byte[fileBytes.length];
                 var i = 0;
@@ -33,14 +32,17 @@ public class ImageServiceImpl implements ImageService {
                 }
 
                 recipe.setImage(boxedFileBytes);
-                recipeRepository.save(recipe);
+                return recipe;
             } catch (IOException e) {
                 log.error("IO Exception occurred.", e);
                 e.printStackTrace();
+                throw new RuntimeException(e);
             }
-        } else {
-            log.error("Recipe with ID " + recipeId + " not found.");
-        }
+        });
+
+        recipeReactiveRepository.save(recipeMono.block()).block();
+
+        return Mono.empty();
     }
 
 }

@@ -21,6 +21,7 @@ import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.multipart.MultipartFile;
 
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
 import guru.springframework.spring5mongorecipeapp.services.ImageService;
@@ -110,6 +111,7 @@ class ImageControllerTest {
         MockMultipartFile multipartFile = new MockMultipartFile(
             "imagefile", "testing.txt", "text/plain", "Spring Framework Guru".getBytes()
         );
+        when(imageService.saveFile(anyString(), any(MultipartFile.class))).thenReturn(Mono.empty());
 
         // when
         mockMvc.perform(multipart("/recipes/1/image").file(multipartFile))
@@ -117,7 +119,7 @@ class ImageControllerTest {
                .andExpect(header().string("Location", "/recipes/1"));
 
         // then
-        verify(imageService).saveFile(anyString(), any());
+        verify(imageService).saveFile(anyString(), any(MultipartFile.class));
     }
 
 }
