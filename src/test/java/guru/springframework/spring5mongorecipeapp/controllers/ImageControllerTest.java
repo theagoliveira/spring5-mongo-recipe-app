@@ -25,6 +25,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
 import guru.springframework.spring5mongorecipeapp.services.ImageService;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 class ImageControllerTest {
 
@@ -67,7 +68,7 @@ class ImageControllerTest {
         recipeCommand.setImage(boxedBytes);
 
         // when
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
         MockHttpServletResponse response = mockMvc.perform(get("/recipes/1/image"))
                                                   .andExpect(status().isOk())
                                                   .andReturn()
@@ -94,7 +95,7 @@ class ImageControllerTest {
         recipeCommand.setId(COMMAND_ID);
 
         // when
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
         mockMvc.perform(get("/recipes/1/image/edit"))
                .andExpect(status().isOk())
                .andExpect(model().attributeExists("recipe"));

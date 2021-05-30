@@ -35,7 +35,7 @@ public class IngredientController {
     @GetMapping({"", "/", "/index"})
     public String index(@PathVariable String recipeId, Model model) {
         log.debug("Get ingredients list for recipe with id " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
 
         return "recipes/ingredients/index";
     }
@@ -46,7 +46,7 @@ public class IngredientController {
         var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).block();
         ingredient.setRecipeId(recipeId);
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("recipeName", recipeService.findCommandById(recipeId).getName());
+        model.addAttribute("recipeName", recipeService.findCommandById(recipeId).block().getName());
 
         return "recipes/ingredients/show";
     }
@@ -55,7 +55,7 @@ public class IngredientController {
     public String newIngredient(@PathVariable String recipeId, Model model) {
         var ingredient = new IngredientCommand();
 
-        if (recipeService.findCommandById(recipeId) == null) {
+        if (recipeService.findCommandById(recipeId).block() == null) {
             // TODO: deal with error
             throw new RuntimeException("Recipe with ID " + recipeId + " does not exist.");
         }

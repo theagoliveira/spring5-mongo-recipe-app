@@ -166,6 +166,8 @@
                 <div th:each="category,iter : ${recipe.categories}">
                   <input type="hidden"
                          th:field="*{categories[__${iter.index}__].id}" />
+                  <input type="hidden"
+                         th:field="*{categories[__${iter.index}__].description}" />
                 </div>
                 <div class="row mt-3">
                   <div class="col-md-12">

@@ -37,7 +37,7 @@ public class ImageController {
     public void show(@PathVariable String recipeId,
                      HttpServletResponse response) throws IOException {
         var recipeCommand = recipeService.findCommandById(recipeId);
-        var recipeImage = recipeCommand.getImage();
+        var recipeImage = recipeCommand.block().getImage();
         var unboxedBytes = new byte[recipeImage.length];
         var i = 0;
 
@@ -53,7 +53,7 @@ public class ImageController {
     @GetMapping("/edit")
     public String edit(@PathVariable String recipeId, Model model) {
         var recipeCommand = recipeService.findCommandById(recipeId);
-        model.addAttribute("recipe", recipeCommand);
+        model.addAttribute("recipe", recipeCommand.block());
 
         return "recipes/image/form";
     }

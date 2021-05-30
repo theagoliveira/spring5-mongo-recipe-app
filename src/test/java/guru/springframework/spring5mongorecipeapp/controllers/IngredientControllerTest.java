@@ -61,7 +61,7 @@ class IngredientControllerTest {
         var command = new RecipeCommand();
 
         // when
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
         mockMvc.perform(get("/recipes/1/ingredients"))
                .andExpect(status().isOk())
                .andExpect(view().name("recipes/ingredients/index"))
@@ -82,7 +82,7 @@ class IngredientControllerTest {
         when(ingredientService.findCommandByIdAndRecipeId(anyString(), anyString())).thenReturn(
             Mono.just(ingredientCommand)
         );
-        when(recipeService.findCommandById(anyString())).thenReturn(recipeCommand);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(recipeCommand));
         mockMvc.perform(get("/recipes/1/ingredients/1"))
                .andExpect(status().isOk())
                .andExpect(view().name("recipes/ingredients/show"))
@@ -97,7 +97,7 @@ class IngredientControllerTest {
     @Test
     void newIngredient() throws Exception {
         // when
-        when(recipeService.findCommandById(anyString())).thenReturn(new RecipeCommand());
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(new RecipeCommand()));
         when(unitOfMeasureService.findAllCommands()).thenReturn(
             Flux.just(new UnitOfMeasureCommand())
         );

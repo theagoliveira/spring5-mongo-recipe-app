@@ -26,6 +26,7 @@ import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
 import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
+import reactor.core.publisher.Mono;
 
 @ExtendWith(MockitoExtension.class)
 class RecipeControllerTest {
@@ -63,7 +64,7 @@ class RecipeControllerTest {
         recipe.setId("1");
 
         // when
-        when(recipeService.findById("1")).thenReturn(recipe);
+        when(recipeService.findById("1")).thenReturn(Mono.just(recipe));
 
         // then
         mockMvc.perform(get("/recipes/1"))
@@ -108,7 +109,7 @@ class RecipeControllerTest {
         command.setId(ID);
 
         // when
-        when(recipeService.findCommandById(anyString())).thenReturn(command);
+        when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
         // then
         mockMvc.perform(get("/recipes/2/edit"))
@@ -129,7 +130,7 @@ class RecipeControllerTest {
         command.setDirections(DIRECTIONS);
 
         // when
-        when(recipeService.saveCommand(any())).thenReturn(command);
+        when(recipeService.saveCommand(any())).thenReturn(Mono.just(command));
 
         // then
         mockMvc.perform(
@@ -162,6 +163,9 @@ class RecipeControllerTest {
 
     @Test
     void destroyRecipe() throws Exception {
+        // given
+        when(recipeService.deleteById(anyString())).thenReturn(Mono.empty());
+
         // then
         mockMvc.perform(get("/recipes/1/delete"))
                .andExpect(status().is3xxRedirection())

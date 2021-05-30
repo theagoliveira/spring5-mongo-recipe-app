@@ -5,11 +5,11 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,6 +23,7 @@ import org.springframework.ui.Model;
 
 import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.services.RecipeServiceImpl;
+import reactor.core.publisher.Flux;
 
 class IndexControllerTest {
 
@@ -35,7 +36,7 @@ class IndexControllerTest {
     Model model;
 
     @Captor
-    ArgumentCaptor<Set<Recipe>> argumentCaptor;
+    ArgumentCaptor<List<Recipe>> argumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -46,19 +47,18 @@ class IndexControllerTest {
     @Test
     void getIndexPage() {
         // given
-        Set<Recipe> recipes = new HashSet<>();
-        recipes.add(new Recipe("Recipe 1"));
-        recipes.add(new Recipe("Recipe 2"));
 
         // when
-        when(recipeService.findAll()).thenReturn(recipes);
+        when(recipeService.findAll()).thenReturn(
+            Flux.just(new Recipe("Recipe 1"), new Recipe("Recipe 2"))
+        );
 
         // then
         assertEquals("index", indexController.getIndexPage(model));
         verify(recipeService).findAll();
         verify(model).addAttribute(eq("recipes"), argumentCaptor.capture());
 
-        Set<Recipe> capturedSet = argumentCaptor.getValue();
+        List<Recipe> capturedSet = argumentCaptor.getValue();
         assertEquals(2, capturedSet.size());
     }
 
@@ -66,7 +66,15 @@ class IndexControllerTest {
     void testMockMVC() throws Exception {
         MockMvc mockMvc = MockMvcBuilders.standaloneSetup(indexController).build();
 
-        mockMvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"));
+        // when
+        when(recipeService.findAll()).thenReturn(
+            Flux.just(new Recipe("Recipe 1"), new Recipe("Recipe 2"))
+        );
+
+        mockMvc.perform(get("/"))
+               .andExpect(status().isOk())
+               .andExpect(view().name("index"))
+               .andExpect(model().attributeExists("recipes"));
     }
 
 }

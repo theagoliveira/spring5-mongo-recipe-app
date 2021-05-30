@@ -23,6 +23,7 @@ import guru.springframework.spring5mongorecipeapp.domain.Recipe;
 import guru.springframework.spring5mongorecipeapp.repositories.CategoryRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.RecipeRepository;
 import guru.springframework.spring5mongorecipeapp.repositories.UnitOfMeasureRepository;
+import guru.springframework.spring5mongorecipeapp.repositories.reactive.RecipeReactiveRepository;
 
 @DataMongoTest
 class RecipeServiceIT {
@@ -30,6 +31,9 @@ class RecipeServiceIT {
     private static final String NEW_DESCRIPTION = "newDescription";
 
     RecipeService recipeService;
+
+    @Autowired
+    RecipeReactiveRepository recipeReactiveRepository;
 
     @Autowired
     RecipeRepository recipeRepository;
@@ -63,7 +67,7 @@ class RecipeServiceIT {
     @BeforeEach
     void setUp() throws Exception {
         recipeService = new RecipeServiceImpl(
-            recipeRepository, recipeCommandToRecipe, recipeToRecipeCommand
+            recipeReactiveRepository, recipeCommandToRecipe, recipeToRecipeCommand
         );
 
         var dataLoader = new DataLoader(
@@ -82,7 +86,7 @@ class RecipeServiceIT {
 
         // when
         testRecipeCommand.setDescription(NEW_DESCRIPTION);
-        RecipeCommand savedRecipeCommand = recipeService.saveCommand(testRecipeCommand);
+        RecipeCommand savedRecipeCommand = recipeService.saveCommand(testRecipeCommand).block();
 
         // then
         assertEquals(NEW_DESCRIPTION, savedRecipeCommand.getDescription());
