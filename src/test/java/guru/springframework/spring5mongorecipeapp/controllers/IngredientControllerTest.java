@@ -90,7 +90,7 @@ class IngredientControllerTest {
                .andExpect(status().isOk())
                .andExpect(view().name("recipes/ingredients/show"))
                .andExpect(model().attributeExists("ingredient"))
-               .andExpect(model().attributeExists("recipeName"));
+               .andExpect(model().attributeExists("recipe"));
 
         // then
         verify(ingredientService).findCommandByIdAndRecipeId(anyString(), anyString());

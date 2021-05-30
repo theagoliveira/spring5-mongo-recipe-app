@@ -9,8 +9,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -37,7 +35,7 @@ class IndexControllerTest {
     Model model;
 
     @Captor
-    ArgumentCaptor<List<Recipe>> argumentCaptor;
+    ArgumentCaptor<Flux<Recipe>> argumentCaptor;
 
     @BeforeEach
     void setUp() {
@@ -59,8 +57,8 @@ class IndexControllerTest {
         verify(recipeService).findAll();
         verify(model).addAttribute(eq("recipes"), argumentCaptor.capture());
 
-        List<Recipe> capturedSet = argumentCaptor.getValue();
-        assertEquals(2, capturedSet.size());
+        Flux<Recipe> capturedSet = argumentCaptor.getValue();
+        assertEquals(2, capturedSet.count().block());
     }
 
     @Disabled("Needs to be refactored for WebFlux")

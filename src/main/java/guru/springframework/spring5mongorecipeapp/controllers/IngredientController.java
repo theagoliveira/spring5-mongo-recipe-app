@@ -35,7 +35,7 @@ public class IngredientController {
     @GetMapping({"", "/", "/index"})
     public String index(@PathVariable String recipeId, Model model) {
         log.debug("Get ingredients list for recipe with id " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId).block());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
 
         return "recipes/ingredients/index";
     }
@@ -43,10 +43,12 @@ public class IngredientController {
     @GetMapping("/{id}")
     public String showIngredient(@PathVariable String id, @PathVariable String recipeId,
                                  Model model) {
-        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).block();
-        ingredient.setRecipeId(recipeId);
+        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).map(i -> {
+            i.setRecipeId(recipeId);
+            return i;
+        });
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("recipeName", recipeService.findCommandById(recipeId).block().getName());
+        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
 
         return "recipes/ingredients/show";
     }
@@ -63,7 +65,7 @@ public class IngredientController {
         ingredient.setRecipeId(recipeId);
         ingredient.setUom(new UnitOfMeasureCommand());
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("uoms", unitOfMeasureService.findAllCommands().collectList().block());
+        model.addAttribute("uoms", unitOfMeasureService.findAllCommands());
 
         return "recipes/ingredients/form";
     }
@@ -71,10 +73,12 @@ public class IngredientController {
     @GetMapping("/{id}/edit")
     public String editIngredient(@PathVariable String id, @PathVariable String recipeId,
                                  Model model) {
-        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).block();
-        ingredient.setRecipeId(recipeId);
+        var ingredient = ingredientService.findCommandByIdAndRecipeId(id, recipeId).map(i -> {
+            i.setRecipeId(recipeId);
+            return i;
+        });
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("uoms", unitOfMeasureService.findAllCommands().collectList().block());
+        model.addAttribute("uoms", unitOfMeasureService.findAllCommands());
 
         return "recipes/ingredients/form";
     }
