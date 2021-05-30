@@ -102,6 +102,10 @@ public class DataLoader implements CommandLineRunner {
         var uom7 = new UnitOfMeasure();
         uom7.setDescription("dash");
         unitOfMeasureRepository.save(uom7);
+
+        var uom8 = new UnitOfMeasure();
+        uom8.setDescription("blank");
+        unitOfMeasureRepository.save(uom8);
     }
 
     private void loadRecipes() {
@@ -110,6 +114,7 @@ public class DataLoader implements CommandLineRunner {
         var tspUom = unitOfMeasureRepository.findByDescription("teaspoon").get();
         var tbspUom = unitOfMeasureRepository.findByDescription("tablespoon").get();
         var dashUom = unitOfMeasureRepository.findByDescription("dash").get();
+        var blankUom = unitOfMeasureRepository.findByDescription("blank").get();
 
         var mexicanCategory = categoryRepository.findByDescription("mexican").get();
         var americanCategory = categoryRepository.findByDescription("american").get();
@@ -119,7 +124,7 @@ public class DataLoader implements CommandLineRunner {
         var ripeAvocados = new Ingredient();
         ripeAvocados.setAmount(BigDecimal.valueOf(2));
         ripeAvocados.setDescription("ripe avocados");
-        ripeAvocados.setUom(null);
+        ripeAvocados.setUom(blankUom);
 
         var salt = new Ingredient();
         salt.setAmount(BigDecimal.valueOf(0.25));
@@ -139,7 +144,7 @@ public class DataLoader implements CommandLineRunner {
         var serranoChiles = new Ingredient();
         serranoChiles.setAmount(BigDecimal.valueOf(2));
         serranoChiles.setDescription("serrano chiles, stems and seeds removed, minced");
-        serranoChiles.setUom(null);
+        serranoChiles.setUom(blankUom);
 
         var cilantro = new Ingredient();
         cilantro.setAmount(BigDecimal.valueOf(2));
@@ -154,22 +159,22 @@ public class DataLoader implements CommandLineRunner {
         var ripeTomato = new Ingredient();
         ripeTomato.setAmount(BigDecimal.valueOf(0.5));
         ripeTomato.setDescription("ripe tomato, seeds and pulp removed, chopped");
-        ripeTomato.setUom(null);
+        ripeTomato.setUom(blankUom);
 
         var redRadishes = new Ingredient();
         redRadishes.setAmount(null);
         redRadishes.setDescription("red radishes or jicama, to garnish");
-        redRadishes.setUom(null);
+        redRadishes.setUom(blankUom);
 
         var tortillaChips = new Ingredient();
         tortillaChips.setAmount(null);
         tortillaChips.setDescription("tortilla chips, to serve");
-        tortillaChips.setUom(null);
+        tortillaChips.setUom(blankUom);
 
         var ripeAvocadosCopy = new Ingredient();
         ripeAvocadosCopy.setAmount(BigDecimal.valueOf(2));
         ripeAvocadosCopy.setDescription("ripe avocados");
-        ripeAvocadosCopy.setUom(null);
+        ripeAvocadosCopy.setUom(blankUom);
 
         var saltCopy = new Ingredient();
         saltCopy.setAmount(BigDecimal.valueOf(0.25));
@@ -189,7 +194,7 @@ public class DataLoader implements CommandLineRunner {
         var serranoChilesCopy = new Ingredient();
         serranoChilesCopy.setAmount(BigDecimal.valueOf(2));
         serranoChilesCopy.setDescription("serrano chiles, stems and seeds removed, minced");
-        serranoChilesCopy.setUom(null);
+        serranoChilesCopy.setUom(blankUom);
 
         var cilantroCopy = new Ingredient();
         cilantroCopy.setAmount(BigDecimal.valueOf(2));
@@ -204,17 +209,17 @@ public class DataLoader implements CommandLineRunner {
         var ripeTomatoCopy = new Ingredient();
         ripeTomatoCopy.setAmount(BigDecimal.valueOf(0.5));
         ripeTomatoCopy.setDescription("ripe tomato, seeds and pulp removed, chopped");
-        ripeTomatoCopy.setUom(null);
+        ripeTomatoCopy.setUom(blankUom);
 
         var redRadishesCopy = new Ingredient();
         redRadishesCopy.setAmount(null);
         redRadishesCopy.setDescription("red radishes or jicama, to garnish");
-        redRadishesCopy.setUom(null);
+        redRadishesCopy.setUom(blankUom);
 
         var tortillaChipsCopy = new Ingredient();
         tortillaChipsCopy.setAmount(null);
         tortillaChipsCopy.setDescription("tortilla chips, to serve");
-        tortillaChipsCopy.setUom(null);
+        tortillaChipsCopy.setUom(blankUom);
 
         log.debug("Creating Notes objects.");
 

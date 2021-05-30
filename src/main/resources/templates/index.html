@@ -31,6 +31,7 @@
                     <tr>
                       <th scope="col">ID</th>
                       <th scope="col">Name</th>
+                      <th scope="col">Ingredients</th>
                       <th scope="col">Edit</th>
                       <th scope="col">Delete</th>
                     </tr>
@@ -42,6 +43,10 @@
                            th:href="'/recipes/' + ${recipe.id}">ID</a>
                       </th>
                       <td th:text="${recipe.name}">Name</td>
+                      <td>
+                        <a
+                           th:href="'/recipes/' + ${recipe.id} + '/ingredients'">Ingredients</a>
+                      </td>
                       <td>
                         <a
                            th:href="'/recipes/' + ${recipe.id} + '/edit'">Edit</a>

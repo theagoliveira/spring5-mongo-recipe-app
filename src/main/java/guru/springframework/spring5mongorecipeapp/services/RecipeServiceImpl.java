@@ -63,6 +63,10 @@ public class RecipeServiceImpl implements RecipeService {
 
     @Override
     public Mono<RecipeCommand> saveCommand(RecipeCommand command) {
+        if (command.getId() != null && command.getId().equals("")) {
+            command.setId(null);
+        }
+
         return recipeReactiveRepository.save(recipeCommandToRecipe.convert(command))
                                        .map(recipeToRecipeCommand::convert);
     }

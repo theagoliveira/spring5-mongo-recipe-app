@@ -60,7 +60,7 @@ public class RecipeController {
 
     @PostMapping
     public String createOrUpdateRecipe(@ModelAttribute("recipe") RecipeCommand command) {
-        log.error("Inside createOrUpdateRecipe.");
+        log.info("Inside createOrUpdateRecipe.");
 
         webDataBinder.validate();
         var bindingResult = webDataBinder.getBindingResult();
@@ -70,9 +70,6 @@ public class RecipeController {
             return RECIPES_FORM;
         }
 
-        if (command.getId() != null && command.getId().equals("")) {
-            command.setId(null);
-        }
         var savedCommand = recipeService.saveCommand(command);
 
         return "redirect:/recipes/" + savedCommand.map(RecipeCommand::getId).share().block();

@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
 class UnitOfMeasureReactiveRepositoryIT {
 
     private static final String TEASPOON = "teaspoon";
-    private static final int UOM_COUNT = 7;
+    private static final int UOM_COUNT = 8;
     private static final String UOM_ID = "1";
     private static final String UOM_DESCRIPTION = "description";
 

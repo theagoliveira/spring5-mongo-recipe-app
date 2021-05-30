@@ -28,16 +28,27 @@ public class IngredientCommand {
     public String toString() {
         var df1 = new DecimalFormat("0");
         var df2 = new DecimalFormat("0.000");
-        var amountIs1 = (amount != null) && (amount.compareTo(BigDecimal.valueOf(1)) == 0);
+
+        var amountIsNotNull = this.amount != null;
+        var uomIsNotNull = this.uom != null;
+        var uomDescriptionIsNotNull = uomIsNotNull && this.uom.getDescription() != null;
+        var amountIs1 = amountIsNotNull && this.amount.compareTo(BigDecimal.valueOf(1)) == 0;
+        var amountIsNot1 = amountIsNotNull && this.amount.compareTo(BigDecimal.valueOf(1)) != 0;
+        var uomDescriptionIsDashOrPinch = uomDescriptionIsNotNull
+                && (this.uom.getDescription().equals("dash")
+                        || this.uom.getDescription().equals("pinch"));
+        var uomDescriptionIsNotBlank = uomDescriptionIsNotNull
+                && !this.uom.getDescription().equals("blank");
+        var uomDescriptionEndsWithH = uomDescriptionIsNotNull
+                && this.uom.getDescription().charAt(this.uom.getDescription().length() - 1) == 'h';
+
         var result = "";
 
-        if (amount != null && !((uom != null) && (uom.getDescription() != null)
-                && (uom.getDescription().equals("dash") || uom.getDescription().equals("pinch"))
-                && amountIs1)) {
-            if (amount.doubleValue() % 1 == 0) {
-                result += df1.format(amount);
+        if (amountIsNotNull && !(uomDescriptionIsDashOrPinch && amountIs1)) {
+            if (this.amount.doubleValue() % 1 == 0) {
+                result += df1.format(this.amount);
             } else {
-                switch (df2.format(amount)) {
+                switch (df2.format(this.amount)) {
                     case "0.500":
                         result += "½";
                         break;
@@ -51,35 +62,33 @@ public class IngredientCommand {
                         result += "⅛";
                         break;
                     default:
-                        result += df2.format(amount);
+                        result += df2.format(this.amount);
                         break;
                 }
             }
             result += " ";
         }
 
-        if (uom != null) {
-            if (uom.getDescription() != null) {
-                if ((uom.getDescription().equals("dash") || uom.getDescription().equals("pinch"))
-                        && amountIs1) {
+        if (uomIsNotNull && uomDescriptionIsNotBlank) {
+            if (uomDescriptionIsNotNull) {
+                if (uomDescriptionIsDashOrPinch && amountIs1) {
                     result += "a ";
                 }
 
-                result += uom.getDescription();
-            }
+                result += this.uom.getDescription();
 
-            if (amount != null && amount.compareTo(BigDecimal.valueOf(1)) != 0) {
-                if (uom.getDescription() != null
-                        && uom.getDescription().charAt(uom.getDescription().length() - 1) == 'h') {
-                    result += "e";
+                if (amountIsNot1) {
+                    if (uomDescriptionEndsWithH) {
+                        result += "e";
+                    }
+                    result += "s";
                 }
-                result += "s";
             }
 
             result += " of ";
         }
 
-        result += description;
+        result += this.description;
 
         return result;
     }
