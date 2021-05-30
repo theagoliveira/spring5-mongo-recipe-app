@@ -11,11 +11,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import guru.springframework.spring5mongorecipeapp.commands.IngredientCommand;
+import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
 import guru.springframework.spring5mongorecipeapp.commands.UnitOfMeasureCommand;
 import guru.springframework.spring5mongorecipeapp.services.IngredientService;
 import guru.springframework.spring5mongorecipeapp.services.RecipeService;
 import guru.springframework.spring5mongorecipeapp.services.UnitOfMeasureService;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @Controller
@@ -42,10 +45,19 @@ public class IngredientController {
         this.webDataBinder = webDataBinder;
     }
 
+    @ModelAttribute("uoms")
+    public Flux<UnitOfMeasureCommand> populateUoms() {
+        return unitOfMeasureService.findAllCommands();
+    }
+
+    @ModelAttribute("recipe")
+    public Mono<RecipeCommand> populateRecipe(@PathVariable String recipeId) {
+        return recipeService.findCommandById(recipeId);
+    }
+
     @GetMapping({"", "/", "/index"})
-    public String index(@PathVariable String recipeId, Model model) {
+    public String index(@PathVariable String recipeId) {
         log.debug("Get ingredients list for recipe with id " + recipeId);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
 
         return "recipes/ingredients/index";
     }
@@ -58,7 +70,6 @@ public class IngredientController {
             return i;
         });
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("recipe", recipeService.findCommandById(recipeId));
 
         return "recipes/ingredients/show";
     }
@@ -75,7 +86,6 @@ public class IngredientController {
         ingredient.setRecipeId(recipeId);
         ingredient.setUom(new UnitOfMeasureCommand());
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("uoms", unitOfMeasureService.findAllCommands());
 
         return INGREDIENTS_FORM;
     }
@@ -88,21 +98,19 @@ public class IngredientController {
             return i;
         });
         model.addAttribute(INGREDIENT_STR, ingredient);
-        model.addAttribute("uoms", unitOfMeasureService.findAllCommands());
 
         return INGREDIENTS_FORM;
     }
 
     @PostMapping
     public String createOrUpdateIngredient(@ModelAttribute("ingredient") IngredientCommand command,
-                                           @PathVariable String recipeId, Model model) {
+                                           @PathVariable String recipeId) {
         log.info("Inside createOrUpdateIngredient.");
 
         webDataBinder.validate();
         var bindingResult = webDataBinder.getBindingResult();
         if (bindingResult.hasErrors()) {
             bindingResult.getAllErrors().forEach(objectError -> log.debug(objectError.toString()));
-            model.addAttribute("uoms", unitOfMeasureService.findAllCommands());
 
             return INGREDIENTS_FORM;
         }
