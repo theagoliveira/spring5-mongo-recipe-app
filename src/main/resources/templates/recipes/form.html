@@ -47,7 +47,7 @@
                        th:class="${#fields.hasErrors('url')} ? 'col-md-9 has-error' : 'col-md-9'">
                     <label th:text="#{recipe.url}" for="url">URL</label>
                     <input type="text" class="form-control" th:field="*{url}"
-                           th:class="${#fields.hasErrors('url')} ? 'form-control is-invalid' : 'form-control'">
+                           th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('url')}">
                       <span th:if="${#fields.errors('url').size() == 1}"
@@ -68,7 +68,7 @@
                            for="description">Description</label>
                     <textarea type="text" class="form-control"
                               th:field="*{description}"
-                              th:class="${#fields.hasErrors('description')} ? 'form-control is-invalid' : 'form-control'"></textarea>
+                              th:errorclass="'is-invalid'"></textarea>
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('description')}">
                       <span th:if="${#fields.errors('description').size() == 1}"
@@ -99,8 +99,7 @@
                     <label th:text="#{recipe.prepTime}" for="prepTime">Prep
                       Time</label>
                     <input type="text" class="form-control"
-                           th:field="*{prepTime}"
-                           th:class="${#fields.hasErrors('prepTime')} ? 'form-control is-invalid' : 'form-control'">
+                           th:field="*{prepTime}" th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('prepTime')}">
                       <span th:if="${#fields.errors('prepTime').size() == 1}"
@@ -118,8 +117,7 @@
                     <label th:text="#{recipe.cookTime}" for="cookTime">Cook
                       Time</label>
                     <input type="text" class="form-control"
-                           th:field="*{cookTime}"
-                           th:class="${#fields.hasErrors('cookTime')} ? 'form-control is-invalid' : 'form-control'">
+                           th:field="*{cookTime}" th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('cookTime')}">
                       <span th:if="${#fields.errors('cookTime').size() == 1}"
@@ -137,8 +135,7 @@
                     <label th:text="#{recipe.servings}"
                            for="servings">Servings</label>
                     <input type="text" class="form-control"
-                           th:field="*{servings}"
-                           th:class="${#fields.hasErrors('servings')} ? 'form-control is-invalid' : 'form-control'">
+                           th:field="*{servings}" th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('servings')}">
                       <span th:if="${#fields.errors('servings').size() == 1}"
@@ -184,7 +181,7 @@
                            for="directions">Directions</label>
                     <textarea type="text" class="form-control"
                               th:field="*{directions}"
-                              th:class="${#fields.hasErrors('directions')} ? 'form-control is-invalid' : 'form-control'"></textarea>
+                              th:errorclass="'is-invalid'"></textarea>
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('directions')}">
                       <span th:if="${#fields.errors('directions').size() == 1}"

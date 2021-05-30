@@ -38,7 +38,7 @@
                     <label for="description">Description</label>
                     <input type="text" class="form-control"
                            th:field="*{description}"
-                           th:class="${#fields.hasErrors('description')} ? 'form-control is-invalid' : 'form-control'">
+                           th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('description')}">
                       <span th:if="${#fields.errors('description').size() == 1}"
@@ -57,8 +57,7 @@
                        th:class="${#fields.hasErrors('amount')} ? 'col-md-3 has-error' : 'col-md-3'">
                     <label for="amount">Amount</label>
                     <input type="text" class="form-control"
-                           th:field="*{amount}"
-                           th:class="${#fields.hasErrors('amount')} ? 'form-control is-invalid' : 'form-control'">
+                           th:field="*{amount}" th:errorclass="'is-invalid'">
                     <div class="invalid-feedback"
                          th:if="${#fields.hasErrors('amount')}">
                       <span th:if="${#fields.errors('amount').size() == 1}"
