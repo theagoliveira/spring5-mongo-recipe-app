@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.servlet.ModelAndView;
 
 import guru.springframework.spring5mongorecipeapp.commands.RecipeCommand;
 import guru.springframework.spring5mongorecipeapp.exceptions.NotFoundException;
@@ -77,17 +76,17 @@ public class RecipeController {
         return "redirect:/index";
     }
 
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(NotFoundException.class)
-    public ModelAndView handleNotFound(Exception exception) {
-        log.error("Handling not found exception.");
-        log.error("Message: " + exception.getMessage());
+    // @ResponseStatus(HttpStatus.NOT_FOUND)
+    // @ExceptionHandler(NotFoundException.class)
+    // public ModelAndView handleNotFound(Exception exception) {
+    //     log.error("Handling not found exception.");
+    //     log.error("Message: " + exception.getMessage());
 
-        var modelAndView = new ModelAndView();
-        modelAndView.setViewName("404");
-        modelAndView.addObject("exception", exception);
+    //     var modelAndView = new ModelAndView();
+    //     modelAndView.setViewName("404");
+    //     modelAndView.addObject("exception", exception);
 
-        return modelAndView;
-    }
+    //     return modelAndView;
+    // }
 
 }

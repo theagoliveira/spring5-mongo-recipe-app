@@ -4,9 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,22 +30,22 @@ public class ImageController {
         this.recipeService = recipeService;
     }
 
-    @GetMapping
-    public void show(@PathVariable String recipeId,
-                     HttpServletResponse response) throws IOException {
-        var recipeCommand = recipeService.findCommandById(recipeId);
-        var recipeImage = recipeCommand.block().getImage();
-        var unboxedBytes = new byte[recipeImage.length];
-        var i = 0;
+    // @GetMapping
+    // public void show(@PathVariable String recipeId,
+    //                  HttpServletResponse response) throws IOException {
+    //     var recipeCommand = recipeService.findCommandById(recipeId);
+    //     var recipeImage = recipeCommand.block().getImage();
+    //     var unboxedBytes = new byte[recipeImage.length];
+    //     var i = 0;
 
-        for (Byte b : recipeImage) {
-            unboxedBytes[i++] = b;
-        }
+    //     for (Byte b : recipeImage) {
+    //         unboxedBytes[i++] = b;
+    //     }
 
-        response.setContentType("image/jpeg");
-        InputStream is = new ByteArrayInputStream(unboxedBytes);
-        IOUtils.copy(is, response.getOutputStream());
-    }
+    //     response.setContentType("image/jpeg");
+    //     InputStream is = new ByteArrayInputStream(unboxedBytes);
+    //     IOUtils.copy(is, response.getOutputStream());
+    // }
 
     @GetMapping("/edit")
     public String edit(@PathVariable String recipeId, Model model) {
