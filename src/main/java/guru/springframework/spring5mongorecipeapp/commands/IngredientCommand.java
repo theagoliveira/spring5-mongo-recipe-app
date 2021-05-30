@@ -3,6 +3,10 @@ package guru.springframework.spring5mongorecipeapp.commands;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +18,14 @@ public class IngredientCommand {
 
     private String id;
     private String recipeId;
+
+    @NotBlank
     private String description;
+
+    @Min(0)
     private BigDecimal amount;
+
+    @NotNull
     private UnitOfMeasureCommand uom;
 
     public IngredientCommand(String id, String description, BigDecimal amount) {

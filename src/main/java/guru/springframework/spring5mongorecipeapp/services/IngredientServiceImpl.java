@@ -59,8 +59,10 @@ public class IngredientServiceImpl implements IngredientService {
         }
 
         String recipeId = command.getRecipeId();
-        var recipe = recipeReactiveRepository.findById(recipeId).block();
-        var uom = unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block();
+        var recipe = recipeReactiveRepository.findById(recipeId).share().block();
+        var uom = unitOfMeasureReactiveRepository.findById(command.getUom().getId())
+                                                 .share()
+                                                 .block();
 
         if (uom == null) {
             new RuntimeException("UOM not found.");
@@ -87,7 +89,7 @@ public class IngredientServiceImpl implements IngredientService {
                 }
             }
 
-            var savedRecipe = recipeReactiveRepository.save(recipe).block();
+            var savedRecipe = recipeReactiveRepository.save(recipe).share().block();
             var savedIngredient = savedRecipe.getIngredientById(id);
 
             if (!savedIngredient.isPresent()) {
@@ -129,21 +131,19 @@ public class IngredientServiceImpl implements IngredientService {
 
     @Override
     public Mono<Void> deleteByIdAndRecipeId(String id, String recipeId) {
-        var recipe = recipeReactiveRepository.findById(recipeId).block();
-
-        if (recipe != null) {
+        Mono<Recipe> recipeMono = recipeReactiveRepository.findById(recipeId).map(recipe -> {
             var optionalIngredient = recipe.getIngredientById(id);
 
             if (optionalIngredient.isPresent()) {
                 var ingredient = optionalIngredient.get();
                 recipe.getIngredients().remove(ingredient);
-                recipeReactiveRepository.save(recipe).block();
+                return recipe;
             } else {
-                log.debug("Ingredient with ID " + id + NOT_FOUND);
+                throw new RuntimeException("Ingredient with ID " + id + NOT_FOUND);
             }
-        } else {
-            log.debug(RECIPE_WITH_ID + id + NOT_FOUND);
-        }
+        });
+
+        recipeReactiveRepository.save(recipeMono.share().block()).share().block();
 
         return Mono.empty();
     }

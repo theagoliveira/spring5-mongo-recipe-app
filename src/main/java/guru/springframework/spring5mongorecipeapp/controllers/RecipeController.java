@@ -77,7 +77,7 @@ public class RecipeController {
 
     @GetMapping("/{id}/delete")
     public String destroyRecipe(@PathVariable String id) {
-        recipeService.deleteById(id).block();
+        recipeService.deleteById(id).share().block();
 
         return "redirect:/index";
     }
