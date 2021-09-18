@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT $JAVA_OPTS -cp target/classes:target/dependency/*:bin/main guru.springframework.spring5mongorecipeapp Spring5MongoRecipeAppApplication
+web: java -Dserver.port=$PORT -jar build/libs/spring5-recipe-app-mongo-0.0.1-SNAPSHOT.jar
