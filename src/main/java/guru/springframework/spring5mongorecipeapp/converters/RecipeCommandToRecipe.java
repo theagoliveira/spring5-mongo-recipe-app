@@ -42,7 +42,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         recipe.setServings(source.getServings());
         recipe.setSource(source.getSource());
         recipe.setUrl(source.getUrl());
-        recipe.setDirections(source.getDirections());
+        recipe.setDirections(source.getDirections().replaceAll("<(/|)\\s*script\\s*>", ""));
         recipe.setDifficulty(source.getDifficulty());
         for (IngredientCommand ingredientCommand : source.getIngredients()) {
             recipe.getIngredients().add(ingredientCommandToIngredient.convert(ingredientCommand));
