@@ -18,8 +18,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
     NotesCommandToNotes notesCommandToNotes;
 
     public RecipeCommandToRecipe(IngredientCommandToIngredient ingredientCommandToIngredient,
-                                 CategoryCommandToCategory categoryCommandToCategory,
-                                 NotesCommandToNotes notesCommandToNotes) {
+            CategoryCommandToCategory categoryCommandToCategory, NotesCommandToNotes notesCommandToNotes) {
         this.ingredientCommandToIngredient = ingredientCommandToIngredient;
         this.categoryCommandToCategory = categoryCommandToCategory;
         this.notesCommandToNotes = notesCommandToNotes;
@@ -34,6 +33,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         }
 
         final var recipe = new Recipe();
+        String directions = source.getDirections() != null ? source.getDirections() : "";
         recipe.setId(source.getId());
         recipe.setName(source.getName());
         recipe.setDescription(source.getDescription());
@@ -42,7 +42,7 @@ public class RecipeCommandToRecipe implements Converter<RecipeCommand, Recipe> {
         recipe.setServings(source.getServings());
         recipe.setSource(source.getSource());
         recipe.setUrl(source.getUrl());
-        recipe.setDirections(source.getDirections().replaceAll("<(/|)\\s*script\\s*>", ""));
+        recipe.setDirections(directions.replaceAll("<(/|)\\s*script\\s*>", ""));
         recipe.setDifficulty(source.getDifficulty());
         for (IngredientCommand ingredientCommand : source.getIngredients()) {
             recipe.getIngredients().add(ingredientCommandToIngredient.convert(ingredientCommand));
